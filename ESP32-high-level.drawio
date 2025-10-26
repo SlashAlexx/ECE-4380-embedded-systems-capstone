@@ -1,0 +1,61 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:144.0) Gecko/20100101 Firefox/144.0" version="28.2.8">
+  <diagram name="Page-1" id="GZ3P9nJAgWYKoeWXMiUo">
+    <mxGraphModel dx="1349" dy="1223" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ZjHNVR6rQKpApC1HLWpX-1" value="STM32" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="464" y="180.69" width="73" height="72.38" as="geometry" />
+        </mxCell>
+        <mxCell id="ZjHNVR6rQKpApC1HLWpX-2" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="607" y="129" width="171" height="229" as="geometry" />
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="ZjHNVR6rQKpApC1HLWpX-4" target="UHx5k4wZz_0UH-IdRVzU-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZjHNVR6rQKpApC1HLWpX-4" value="&lt;div&gt;SPIFFS&lt;/div&gt;&lt;div&gt;(HTML/CSS&lt;/div&gt;&lt;div&gt;JS)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="702" y="284.38" width="73" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-1" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.android.phone2;" vertex="1" parent="1">
+          <mxGeometry x="960" y="-114" width="200" height="390" as="geometry" />
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-3" value="" style="verticalLabelPosition=bottom;shadow=0;dashed=0;align=center;html=1;verticalAlign=top;shape=mxgraph.electrical.radio.aerial_-_antenna_1;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="724" y="76" width="42.4" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="UHx5k4wZz_0UH-IdRVzU-5" target="UHx5k4wZz_0UH-IdRVzU-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-5" value="&lt;div&gt;Async&lt;/div&gt;&lt;div&gt;Webserver&lt;/div&gt;&lt;div&gt;(WebSocket)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="702" y="183.38" width="73" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.865;entryY=0.003;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.725;exitY=-0.002;exitDx=0;exitDy=0;exitPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="745.025" y="183.37599999999998" as="sourcePoint" />
+            <mxPoint x="745.015" y="129.817" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="745.1" y="181.13" />
+              <mxPoint x="745.1" y="181.13" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.01;entryY=0.554;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;dashed=1;" edge="1" parent="1" source="UHx5k4wZz_0UH-IdRVzU-3" target="UHx5k4wZz_0UH-IdRVzU-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-21" value="Local IP Address" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="UHx5k4wZz_0UH-IdRVzU-15">
+          <mxGeometry x="0.0723" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="UHx5k4wZz_0UH-IdRVzU-16" target="ZjHNVR6rQKpApC1HLWpX-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-16" value="UART Tx" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="607" y="202.38" width="56" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="UHx5k4wZz_0UH-IdRVzU-19" value="&lt;b&gt;ESP32&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="606" y="102" width="171" height="27" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
