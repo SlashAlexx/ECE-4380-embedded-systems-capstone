@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <nav id="NavBar">
+        <h3>Automated Watering Metrics</h3>
+    </nav>
+    <div id="CurrentTimeContainer">
+        <h1 id="TimeValue">12:31 PM</h1>
+    </div>
+
+    <div id="TopRowContainer">
+        <div id="MoistureLevelContainer">
+            <h3 id="MoistureLevelValue">Moisture Level: 50%</h3>
+            <canvas id="MoistureLevelCanvas">
+            </div>
+            <div id="NextWateringContainer">
+                <h3 id="NextWateringTime">Next Watering: 6:00 PM</h3>
+                <button id="ManualWaterButton">Manually Water</button>
+            </div>
+        </div>
+    </div>
+    <div id="PowerConsumptionContainer">
+        <h3>Power Consumption</h3>
+        <canvas id="PowerCanvas" width="200" height="100" style="border:1px solid #000000;">
+    </div>
+    <div id="TimingContainer">
+        <div id="WateringLogsContainer">
+            <h3>Watering Logs</h3>
+            <div id="WateringLogsTimes">
+                <ul>11/7 - 8:30 AM - 2 oz</ul>
+                <ul>11/6 - 6:00 PM - 2 oz</ul>
+                <ul>11/6 - 8:30 AM - 2 oz</ul>
+                <ul>11/5 - 8:14 PM - 4 oz - Manual</ul>
+                <ul>11/5 - 6:00 PM - 2 oz</ul>
+            </div>
+        </div>
+        <div id="WateringTimesContainer">
+            <h3>Watering Times</h3>
+            <div id="WateringTimesTimes">
+                <ul>Every Day - 8:30 AM - 2 oz</ul>
+                <ul>Every Day - 6:00 PM - 2 oz</ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
