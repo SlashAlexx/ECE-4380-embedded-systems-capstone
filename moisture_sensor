@@ -1,0 +1,30 @@
+    // Start ADC conversion
+	      HAL_ADC_Start(&hadc1);
+
+	      // Wait until conversion is done
+	      if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK)
+	      {
+	          // Read ADC value (0–4095)
+	          adcValue = HAL_ADC_GetValue(&hadc1);
+
+	          // Convert ADC value to voltage (0–3.3V)
+	          voltage = (adcValue * 3.3f) / 4095.0f;
+
+	          // Determine moisture level (adjusted thresholds)
+	          char *condition;
+	          if (voltage > 1.8f)
+	              condition = "Dry";
+	          else if (voltage > 0.9f)
+	              condition = "Damp";
+	          else
+	              condition = "Wet";
+
+	          // ✅ Correct float printing
+	          int len = sprintf(msg, "ADC: %lu | Voltage: %.2f V | Condition: %s\r\n",
+	                            adcValue, voltage, condition);
+	          HAL_UART_Transmit(&huart2, (uint8_t*)msg, len, HAL_MAX_DELAY);
+	      }
+
+	      // Wait 1 second between readings
+	      HAL_Delay(1000);
+	  }
