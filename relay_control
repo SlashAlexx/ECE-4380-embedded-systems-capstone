@@ -1,0 +1,13 @@
+ // === TURN RELAY ON ===
+      HAL_GPIO_WritePin(GPIOA, RELAY_OUTPUT_Pin, GPIO_PIN_RESET);  // Active LOW
+      HAL_GPIO_WritePin(GPIOA, LED_STATUS_Pin, GPIO_PIN_SET);
+      len = sprintf(msg, "Relay ON - Pin LOW\r\n");
+      HAL_UART_Transmit(&huart2, (uint8_t*)msg, len, HAL_MAX_DELAY);
+      HAL_Delay(2000);
+
+      // === TURN RELAY OFF ===
+      HAL_GPIO_WritePin(GPIOA, RELAY_OUTPUT_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(GPIOA, LED_STATUS_Pin, GPIO_PIN_RESET);
+      len = sprintf(msg, "Relay OFF - Pin HIGH\r\n");
+      HAL_UART_Transmit(&huart2, (uint8_t*)msg, len, HAL_MAX_DELAY);
+      HAL_Delay(2000);
