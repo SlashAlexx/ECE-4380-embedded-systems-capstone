@@ -5,6 +5,9 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
+#include "include/FileSystem.hpp"
+#include "include/network.hpp"
+
 AsyncWebServer webserver(80);
 AsyncWebSocket ws("/ws");
 
@@ -32,14 +35,20 @@ void initWebSocket(){
 }
 
 void setup() {
-
   Serial.begin(115200);
 
+  bool wifi_status = beginWiFiConnection();
+  if (!wifi_status){
+    Serial.println("ERROR: Unable to connect to a known network...");
+    return;
+  }
 
+  Serial.println(WiFi.localIP());
+  ws.onEvent(onEvent());
+  webserver.begin();
 }
 
 void loop() {
 
-  
-
+  ws.cleanupClients();
 }
