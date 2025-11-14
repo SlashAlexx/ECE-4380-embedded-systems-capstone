@@ -26,4 +26,4 @@ typedef struct authCredentials{
 bool initializeFilesystem();
 String getLatestFromJSON();
 uint8_t getKnownNetworkCount();
-*authCredentials getNetworkAuth(uint8_t network_index); // Get's auth1 set from JSON
+authCredentials getNetworkAuth(uint8_t network_index); // Get's auth1 set from JSON

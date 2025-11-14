@@ -2,7 +2,8 @@
 // Alexander Roberts
 
 #include "Arduino.h"
+#include <WiFi.h>
 
-uint_8 CONNECTION_RETRIES 10;
+const uint8_t CONNECTION_RETRIES = 10;
 
 bool beginWiFiConnection();

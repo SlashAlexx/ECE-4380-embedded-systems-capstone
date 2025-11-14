@@ -1,28 +1,35 @@
 // Header file for network related functionality
 // Alexander Roberts
 
-#include "network.hpp"
-#include "FileSystem.hpp"
+#include "include/network.hpp"
+#include "include/FileSystem.hpp"
 
-bool beginWiFiConnection(){
+bool beginWiFiConnection() {
+    uint8_t network_count = getKnownNetworkCount();
+    Serial.println("Total Network Count: " + String(network_count));
 
-  uint8_t network_count = getKnownNetworkCount();
-  for (int i = 0; i < network_count; i++){
+    for (int i = 1; i <= network_count; i++) {
+        authCredentials creds = getNetworkAuth(i);
+        if (creds.ssid.length() == 0) continue;
 
-    authCredentials *creds = getNetworkAuth(i);
-    WiFi.begin(creds.ssid, creds.pswd);
+        Serial.println("Connecting to WiFi: " + creds.ssid);
+        WiFi.begin(creds.ssid.c_str(), creds.pswd.c_str());
 
-    uint8_t connection_count = 0;
-    Serial.println("Connecting to WiFi..");
-    while (WiFi.status() != WL_CONNECTED){
-      delay(500); // 0.5 seconds
-      if (++connection_count >= CONNECTION_RETRIES){
-        Serial.println("Unable to connect to network: " + creds.ssid);
-        break; // Tries next available network
-      }
+        uint8_t connection_count = 0;
+        while (WiFi.status() != WL_CONNECTED) {
+            delay(500);
+            if (++connection_count >= CONNECTION_RETRIES) {
+                Serial.println("Unable to connect to network: " + creds.ssid);
+                break; // try next network
+            }
+        }
+
+        if (WiFi.status() == WL_CONNECTED) {
+            Serial.println("Connected to network: " + creds.ssid);
+            return true;
+        }
     }
-    Serial.println("Connected to network: " + creds.ssid);
-    return true;
-  }
-  return false;
+
+    Serial.println("Unable to connect to any known network.");
+    return false;
 }

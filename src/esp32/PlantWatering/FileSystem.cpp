@@ -41,46 +41,38 @@ String getLatestFromJSON(){
 }
 
 uint8_t getKnownNetworkCount(){
-    File latest_file = SPIFFS.open("/auth.json");
-    if (!latest_file){
+  
+    if (!SPIFFS.exists("/auth.json")) {
         Serial.println("Unable to locate Auth File");
-        return "{}";
+        return 0;
     }
 
-    DynamicJsonDocument doc(1024);
-    DeserializationError = deserializeJson(doc, latest_file);
-    latest_file.close();
-
-    if (error){
-        Serial.print("Failed to parse JSON");
-        Serial.println(error.f_str());
-        return "{}";
+    File file = SPIFFS.open("/auth.json", "r");
+    DynamicJsonDocument doc(512);
+    DeserializationError error = deserializeJson(doc, file);
+    file.close();
+    if (error) {
+        Serial.println("Failed to parse auth JSON");
+        return 0;
     }
-    return doc["network_count"];
+    
+    return doc["network_count"].as<uint8_t>();
 }
 
-*authCredentials getNetworkAuth(uint8_t network_index){
+authCredentials getNetworkAuth(uint8_t network_index){
 
-    File latest_file = SPIFFS.open("/auth.json");
-    if (!latest_file){
-        Serial.println("Unable to locate Auth File");
-        return "{}";
-    }
+  authCredentials auth; // Empty Default
+  File file = SPIFFS.open("/auth.json", "r");
+  if (!file) return auth;
+    
+  DynamicJsonDocument doc(512);
+  DeserializationError error = deserializeJson(doc, file);
+  file.close();
 
-    DynamicJsonDocument doc(1024);
-    DeserializationError = deserializeJson(doc, latest_file);
-    latest_file.close();
+  if (error) return auth;
 
-    if (error){
-        Serial.print("Failed to parse JSON");
-        Serial.println(error.f_str());
-        return "{}";
-    }
-
-    authCredentials auth;
-    String network = "network" + network_index;
-    auth.ssid = doc["network"]["ssid"];
-    auth.pswd = doc["network"]["password"];
-
-    return auth;
+  String networkKey = "network" + String(network_index);
+  auth.ssid = String(doc[networkKey]["ssid"].as<const char*>());
+  auth.pswd = String(doc[networkKey]["password"].as<const char*>());
+  return auth;
 }
