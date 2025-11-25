@@ -1,5 +1,5 @@
 {
-    "MoistureLevel": 50,
+    "MoistureLevel": 80,
     "PowerData":[
         4,
         10,
@@ -19,19 +19,6 @@
             "Time": "6:00 PM",
             "Amount": 2,
             "IsManual": false
-        }
-    },
-    "MoistureCheckTime":{
-        "NewMoistureCheckTimeIndex": 2,
-        "MoistureCheckTime1":{
-            "Occurance": "MTWRFSS",
-            "Time": "8:30 AM",
-            "Amount": 2
-        },
-        "MoistureCheckTime0":{
-            "Occurance": "MTWRFSS",
-            "Time": "6:00 PM",
-            "Amount": 2
         }
     }
 }

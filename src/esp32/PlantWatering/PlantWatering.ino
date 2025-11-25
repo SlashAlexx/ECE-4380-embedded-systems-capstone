@@ -5,6 +5,11 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
+#include <FastLED.h>
+
+#define PIN_WS2812B 26
+#define PIXEL_NUM 20
+CRGB leds[PIXEL_NUM];
 
 #include "include/FileSystem.hpp"
 #include "include/network.hpp"
@@ -67,6 +72,27 @@ void setup() {
   webserver.begin();
 
   String latestDataString = getLatestFromJSON();
+  ws.textAll(latestDataString);
+
+
+
+  // INIT GROW Light LEDs
+  Serial.println("Initializing Grow Light LEDs");
+  FastLED.addLeds<WS2812B, PIN_WS2812B, GRB>(leds, PIXEL_NUM);
+  FastLED.setBrightness(100);
+
+  int blue_count = 4;
+  for (int pixel=0; pixel < PIXEL_NUM; pixel++){
+
+    if (--blue_count == 0){
+      leds[pixel] = CRGB(0,0,255);
+      blue_count = 3;
+    }
+    else {
+      leds[pixel] = CRGB(255,0,0);
+    }
+    FastLED.show();
+  }
 }
 
 void loop() {

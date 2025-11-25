@@ -44,7 +44,7 @@ body {
 #NextWateringContainer{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content:end;
     color: red;
 }
 
@@ -53,8 +53,8 @@ body {
     color: white;
     border: 0;
     border-radius: 5px;
-    width: 100%;
-    height: 40px;
+    width: 120%;
+    height: 50px;
     margin-top: 8px;
 }
 
@@ -79,7 +79,8 @@ body {
 #TimingContainer{
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: left;
     padding-top: 40px;
     color: #535353;
+    padding-left: 5%;
 }
