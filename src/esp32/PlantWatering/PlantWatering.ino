@@ -5,17 +5,18 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
-#include <FastLED.h>
-
-#define PIN_WS2812B 26
-#define PIXEL_NUM 20
-CRGB leds[PIXEL_NUM];
+#include <ArduinoJson.h>
 
 #include "include/FileSystem.hpp"
 #include "include/network.hpp"
 
+#define UART2_TX 17
+#define UART2_RX 16
+
 AsyncWebServer webserver(80);
 AsyncWebSocket ws("/ws");
+
+String receivedUART = "";
 
 void initWebSocket(){
   ws.onEvent(onEvent);
@@ -49,8 +50,51 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
   }
 }
 
+void processUART(String jsonStr){
+  StaticJsonDocument<256> doc;
+  DeserializationError err = deserializeJson(doc, jsonStr);
+
+  if (!err) {
+      String wsPayload;
+      serializeJson(doc, wsPayload);
+      ws.textAll(wsPayload); // send to all connected clients
+  } else {
+      Serial.println("JSON parse error");
+  }
+
+}
+
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(115200); // Serial Debugging
+  Serial2.begin(115200, SERIAL_8N1, UART2_RX, UART2_TX); // STM32 UART Connection
+
+  // --- Confirm STM32 UART Connection ---
+  Serial2.println("ACK");
+
+  String UART_ACK = "";
+  unsigned long t0 = millis();
+  while (millis() - t0 < 2000) {  // 2-second timeout
+      if (Serial2.available()) {
+          char c = Serial2.read();
+          if (c == '\n') {
+              UART_ACK = receivedUART;
+              break;
+          } else {
+              receivedUART += c;
+          }
+      }
+  }
+
+  receivedUART = "";
+  UART_ACK.trim();
+  if (UART_ACK == "ACK") {
+      Serial.println("STM32 UART Connection Established");
+  } else {
+      Serial.println("Unable to establish UART Connection with STM32");
+      while (1);
+  }
+
+  // -- Init WiFi Connection ---
   initializeFilesystem();
   
   bool wifi_status = beginWiFiConnection();
@@ -67,36 +111,25 @@ void setup() {
   });
   
   // Serve static files
-  webserver.serveStatic("/", SPIFFS, "/");
-
+  webserver.serveStatic("/static", SPIFFS, "/");
   webserver.begin();
 
-  String latestDataString = getLatestFromJSON();
-  ws.textAll(latestDataString);
-
-
-
-  // INIT GROW Light LEDs
-  Serial.println("Initializing Grow Light LEDs");
-  FastLED.addLeds<WS2812B, PIN_WS2812B, GRB>(leds, PIXEL_NUM);
-  FastLED.setBrightness(100);
-
-  int blue_count = 4;
-  for (int pixel=0; pixel < PIXEL_NUM; pixel++){
-
-    if (--blue_count == 0){
-      leds[pixel] = CRGB(0,0,255);
-      blue_count = 3;
-    }
-    else {
-      leds[pixel] = CRGB(255,0,0);
-    }
-    FastLED.show();
-  }
+  // --- TEST UART CONNECTION UPDATES (TX INTO RX) ---
+  receivedUART = "";
+  Serial2.println("{\"MoistureLevel\": 30}");
 }
 
 void loop() {
 
- 
+  // Continuously check for incoming UART data
+  while (Serial2.available()){
+    char c = Serial2.read();
+    if (c == '\n'){
+      processUART(receivedUART);
+      receivedUART = ""; // Clear
+    }
+    else receivedUART += c;
+  }
+
   ws.cleanupClients();
 }
