@@ -25,8 +25,12 @@ void initWebSocket(){
 
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len){
   AwsFrameInfo *info = (AwsFrameInfo*)arg;
-  if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT){
+  if (info->final && info->opcode == WS_TEXT){
     data[len] = 0;
+    String msg = (char*)data;
+
+    Serial2.print(msg);
+    Serial2.print("\n");
   }
 }
 
@@ -51,7 +55,7 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
 }
 
 void processUART(String jsonStr){
-  StaticJsonDocument<256> doc;
+  StaticJsonDocument<1024> doc;
   DeserializationError err = deserializeJson(doc, jsonStr);
 
   if (!err) {
@@ -113,10 +117,6 @@ void setup() {
   // Serve static files
   webserver.serveStatic("/static", SPIFFS, "/");
   webserver.begin();
-
-  // --- TEST UART CONNECTION UPDATES (TX INTO RX) ---
-  receivedUART = "";
-  Serial2.println("{\"MoistureLevel\": 30}");
 }
 
 void loop() {

@@ -3,6 +3,9 @@ var gateway = `ws://${window.location.hostname}/ws`;
 var websocket;
 window.addEventListener('load', onLoad);
 
+let powerGraph;
+let powerData = []; // Resent on esp32 init
+
 function initWebSocket(){
     console.log("Trying to open a WebSocket connection...");
     websocket = new WebSocket(gateway);
@@ -48,11 +51,16 @@ function onMessage(event){
                 ul.appendChild(li);
             });
     }
+
+    if (obj.GrowLEDPower){
+        updatePowerGraph(obj.power);
+    }
     
 }
 
 function onLoad(event){
     initWebSocket();
+    initPowerChart();
 }
 
 // Set and Display Time
@@ -95,4 +103,52 @@ function drawMoistureGauge(value) {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 2;
     ctx.stroke();
+}
+
+function initPowerGraph(){
+    const ctx = document.getElementById("PowerCanvas").getContext("2d");
+
+    powerGraph = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: "Power",
+                data: [],
+                borderWidth: 2,
+                tension: 0.3
+            }]
+        },
+        options: {
+            animation: false,
+            responsive: false,
+            scales: {
+                x: { display: false },
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+
+let powerHistoryMax = 100;
+function updatePowerGraph(value){
+
+    // Store Data
+    powerData.push(value);
+    if (powerData.length > powerHistoryMax) {
+        powerData.shift();
+    }
+
+    // Push to Graph
+    powerGraph.data.labels = powerData.map((_,i) => i);
+    powerGraph.data.datasets[0].data = powerData;
+    powerGraph.update();
+}
+
+function sendManualWaterCommand(){
+    websocket.send("PUMP_PULSE");
+}
+
+function sendToggleGrowLEDCommand(){
+    websocket.send("LED_TOGGLE")
 }

@@ -20,7 +20,8 @@
             <canvas id="MoistureLevelCanvas">
             </div>
             <div id="NextWateringContainer">
-                <button id="ManualWaterButton">Manually Water</button>
+                <button id="ManualWaterButton" onclick="sendManualWaterCommand()">Manually Water</button>
+                <button id="ManualWaterButton" onclick="sendToggleGrowLEDCommand()">Toggle Grow LEDs</button>
             </div>
         </div>
     </div>
@@ -35,6 +36,7 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
