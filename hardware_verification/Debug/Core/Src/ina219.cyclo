@@ -1,0 +1,6 @@
+../Core/Src/ina219.c:12:13:INA219_WriteRegister	1
+../Core/Src/ina219.c:21:17:INA219_ReadRegister	1
+../Core/Src/ina219.c:29:6:INA219_Init	1
+../Core/Src/ina219.c:43:6:INA219_Read	2
+../Core/Src/ina219.c:66:7:INA219_GetCurrent_mA	1
+../Core/Src/ina219.c:71:7:INA219_GetBusVoltage_V	1

@@ -1,0 +1,2 @@
+../Core/Src/uart_debug.c:11:6:Debug_Print	2
+../Core/Src/uart_debug.c:25:6:Debug_Println	1
