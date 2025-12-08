@@ -77,22 +77,89 @@ authCredentials getNetworkAuth(uint8_t network_index){
   return auth;
 }
 
-void addWateringLog(JsonObject newLog){
-  File file = SPIFFS.open("/watering-data.json", "r");
-  if (!file) {
-    Serial.println("File not found");
-    return;
-  }
 
-  // Parse Exisitng JSON
-  DynamicJsonDocument doc(4096);
-  DeserializdError err = deserializeJson(doc, file);
-  file.close();
-  if (err) {
-      Serial.println("JSON parse error");
-      return;
-  }
-  
-  
-  
+void addJsonMoisture(uint8_t value){
+    File file = SPIFFS.open("/watering-data.json", "r");
+    if (!file) return;
+
+    DynamicJsonDocument doc(2048);
+    deserializeJson(doc, file);
+    file.close();
+
+    doc["MoistureLevel"] = value;
+
+    JsonArray arr = doc["MoistureData"].as<JsonArray>();
+    if (arr.isNull()) {
+        arr = doc.createNestedArray("MoistureData");
+    }
+    arr.add(value);
+
+    file = SPIFFS.open("/watering-data.json", "w");
+    serializeJson(doc, file);
+    file.close();
+}
+
+void addJsonPowerReading(uint16_t value){
+    File file = SPIFFS.open("/watering-data.json", "r");
+    if (!file) return;
+
+    DynamicJsonDocument doc(2048);
+    deserializeJson(doc, file);
+    file.close();
+
+    // Handle No Data Yet
+    JsonArray arr = doc["PowerData"].as<JsonArray>();
+    if (arr.isNull()) {
+        arr = doc.createNestedArray("PowerData");
+    }
+    arr.add(value);
+
+    file = SPIFFS.open("/watering-data.json", "w");
+    serializeJson(doc, file);
+    file.close();
+}
+
+void appendIncomingWateringLog(String jsonStr){
+
+    DynamicJsonDocument incomingDoc(512);
+    DeserializationError err = deserializeJson(incomingDoc, jsonStr);
+    if (err) {
+        Serial.println("Failed to parse incoming log JSON");
+        return;
+    }
+
+    JsonObject newLog = incomingDoc["WateringLog"]["Log"];
+    if (newLog.isNull()) {
+        Serial.println("No Log object in incoming JSON");
+        return;
+    }
+
+    // Load existing and Append
+    File file = SPIFFS.open("/watering-data.json", "r");
+    DynamicJsonDocument doc(4096);
+    err = deserializeJson(doc, file);
+    file.close();
+
+    JsonObject logs = doc["WateringLogs"].as<JsonObject>();
+    if (logs.isNull()) {
+        logs = doc.createNestedObject("WateringLogs");
+        logs["NewLogIndex"] = 0;
+    }
+
+    int index = logs["NewLogIndex"].as<int>();
+    String logKey = "Log" + String(index);
+
+    JsonObject logEntry = logs.createNestedObject(logKey);
+    logEntry["Date"] = newLog["Date"].as<const char*>();
+    logEntry["Time"] = newLog["Time"].as<const char*>();
+    logEntry["Amount"] = newLog["Amount"].as<int>();
+    logEntry["IsManual"] = newLog["IsManual"].as<bool>();
+
+    logs["NewLogIndex"] = index + 1;
+
+    // Save JSON back to SPIFFS
+    file = SPIFFS.open("/watering-data.json", "w");
+    serializeJson(doc, file);
+    file.close();
+    Serial.println("New watering log added successfully");
 }

@@ -54,7 +54,7 @@ body {
     border: 0;
     border-radius: 5px;
     width: 120%;
-    height: 50px;
+    height: 42px;
     margin-top: 8px;
 }
 
@@ -71,6 +71,20 @@ body {
 }
 
 #PowerCanvas{
+    width: 400px;
+    height: 150px;
+    border: 1px solid #535353;;
+}
+
+#MoistureSensorDataContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 40px;
+    color: #535353;
+}
+
+#MoistureCanvas{
     width: 400px;
     height: 150px;
     border: 1px solid #535353;;

@@ -4,19 +4,6 @@
 #include <Arduino.h>
 #include <string.h>
 
-typedef struct WateringTimeInstance{
-    String occurance = "";
-    String time = "";
-    uint8_t amount = 0;
-} WateringTimeInstance;
-
-typedef struct WateringLogInstance{
-    String date = "";
-    String time = "";
-    uint8_t amount = 0;
-    bool isManual = false;
-} WateringLogInstance;
-
 typedef struct authCredentials{
     String ssid = "";
     String pswd = "";
@@ -26,4 +13,9 @@ typedef struct authCredentials{
 bool initializeFilesystem();
 String getLatestFromJSON();
 uint8_t getKnownNetworkCount();
-authCredentials getNetworkAuth(uint8_t network_index); // Get's auth1 set from JSON
+authCredentials getNetworkAuth(uint8_t network_index);
+
+// Helpers for Updating SPIFFS
+void addJsonMoisture(uint8_t value);
+void addJsonPowerReading(uint16_t value);
+void appendIncomingWateringLog(String jsonStr);

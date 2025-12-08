@@ -4,7 +4,10 @@ var websocket;
 window.addEventListener('load', onLoad);
 
 let powerGraph;
-let powerData = []; // Resent on esp32 init
+let powerData = [];
+
+let moistureGraph;
+let moistureData = [];
 
 function initWebSocket(){
     console.log("Trying to open a WebSocket connection...");
@@ -28,13 +31,12 @@ function onMessage(event){
     console.log(event.data);
     var obj = JSON.parse(event.data);
 
-
-    "{\"MoistureLevel\": 50}"
-
     if (obj.MoistureLevel){
         var moistureLevel = obj.MoistureLevel;
         document.getElementById("MoistureLevelValue").textContent = `Moisture Level: ${moistureLevel}%`;
         drawMoistureGauge(moistureLevel);
+
+        updateMoistureGraph(obj.MoistureLevel);
     }
     
     if (obj.WateringLogs) {
@@ -64,6 +66,7 @@ function onMessage(event){
 function onLoad(event){
     initWebSocket();
     initPowerGraph();
+    initMoistureGraph();
 }
 
 // Set and Display Time
@@ -148,13 +151,57 @@ function updatePowerGraph(value){
     powerGraph.update();
 }
 
+
+function initMoistureGraph(){
+    const ctx = document.getElementById("MoistureCanvas").getContext("2d");
+
+    moistureGraph = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: "Moisture",
+                data: [],
+                borderWidth: 2,
+                tension: 0.3
+            }]
+        },
+        options: {
+            animation: false,
+            responsive: false,
+            scales: {
+                x: { display: false },
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+
+let moistureHistoryMax = 50;
+function updateMoistureGraph(value){
+
+    // Store Data
+    moistureData.push(value);
+    if (moistureData.length > moistureHistoryMax) {
+        moistureData.shift();
+    }
+
+    // Push to Graph
+    moistureGraph.data.labels = moistureData.map((_,i) => i);
+    moistureGraph.data.datasets[0].data = moistureData;
+    moistureGraph.update();
+}
+
 function sendManualWaterCommand(){
 
+    const btn = document.getElementById("ManualWaterButton");
+    btn.disabled = true; // Disable  button to prevent multiple presses
     websocket.send("PUMP_ON");
 
-    // off after 2 seconds
+    // Off after 2 seconds
     setTimeout(() => {
         websocket.send("PUMP_OFF");
+        btn.disabled = false;
     }, 2000);
 }
 

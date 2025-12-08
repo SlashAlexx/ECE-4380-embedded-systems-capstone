@@ -1,5 +1,15 @@
 {
     "MoistureLevel": 80,
+    "MoistureData":[
+        70,
+        75,
+        62,
+        50,
+        81,
+        76,
+        79,
+        73
+    ],
     "PowerData":[
         4,
         10,

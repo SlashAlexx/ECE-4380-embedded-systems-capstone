@@ -58,17 +58,26 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
 }
 
 void processUART(String jsonStr){
-  StaticJsonDocument<1024> doc;
-  DeserializationError err = deserializeJson(doc, jsonStr);
 
-  if (!err) {
-      String wsPayload;
-      serializeJson(doc, wsPayload);
-      ws.textAll(wsPayload); // send to all connected clients
-  } else {
-      Serial.println("JSON parse error");
+  Serial.print("Recived UART Message: ");
+  Serial.println(jsonStr);
+
+  StaticJsonDocument<1024> incoming;
+  DeserializationError err = deserializeJson(incoming, jsonStr);
+  if (err) {
+    Serial.println("JSON parse error");
+    return;
   }
 
+  // Send to SPIFFS
+  if (incoming["MoistureLevel"]) addJsonMoisture(incoming["MoistureLevel"]);
+  else if (incoming["PowerData"]) addJsonPowerReading(incoming["PowerData"]);
+  else if (incoming["WateringLog"]) appendIncomingWateringLog(jsonStr);
+
+  String wsPayload;
+  serializeJson(incoming, wsPayload);
+  ws.textAll(wsPayload); // send to all connected clients
+      
 }
 
 void setup() {

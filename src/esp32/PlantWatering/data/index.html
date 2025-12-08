@@ -23,13 +23,18 @@
 
         <div id="NextWateringContainer">
             <button id="ManualWaterButton" onclick="sendManualWaterCommand()">Manually Water</button>
-            <button id="ToggleLEDButton" onclick="sendToggleGrowLEDCommand()">Toggle Grow LEDs</button>
+            <button id="ManualWaterButton" onclick="sendToggleGrowLEDCommand()">Toggle Grow LEDs</button>
         </div>
     </div>
 
     <div id="PowerConsumptionContainer">
         <h3>Power Consumption</h3>
-        <canvas id="PowerCanvas" width="350" height="150" style="border:1px solid #000;"></canvas>
+        <canvas id="PowerCanvas" style="border:1px solid #000;"></canvas>
+    </div>
+
+    <div id="MoistureSensorDataContainer">
+        <h3>Power Consumption</h3>
+        <canvas id="MoistureCanvas" style="border:1px solid #000;"></canvas>
     </div>
 
     <div id="TimingContainer">
