@@ -28,6 +28,9 @@ function onMessage(event){
     console.log(event.data);
     var obj = JSON.parse(event.data);
 
+
+    "{\"MoistureLevel\": 50}"
+
     if (obj.MoistureLevel){
         var moistureLevel = obj.MoistureLevel;
         document.getElementById("MoistureLevelValue").textContent = `Moisture Level: ${moistureLevel}%`;
@@ -45,7 +48,7 @@ function onMessage(event){
             .forEach(key => {
                 const log = logs[key];
 
-                const li = document.createElement("ul");
+                const li = document.createElement("li");
                 li.textContent = `${log.Date} at ${log.Time} — ${log.Amount} oz (${log.IsManual ? "Manual" : "Automatic"})`;
 
                 ul.appendChild(li);
@@ -53,14 +56,14 @@ function onMessage(event){
     }
 
     if (obj.GrowLEDPower){
-        updatePowerGraph(obj.power);
+        updatePowerGraph(obj.GrowLEDPower);
     }
     
 }
 
 function onLoad(event){
     initWebSocket();
-    initPowerChart();
+    initPowerGraph();
 }
 
 // Set and Display Time
@@ -146,9 +149,15 @@ function updatePowerGraph(value){
 }
 
 function sendManualWaterCommand(){
-    websocket.send("PUMP_PULSE");
+
+    websocket.send("PUMP_ON");
+
+    // off after 2 seconds
+    setTimeout(() => {
+        websocket.send("PUMP_OFF");
+    }, 2000);
 }
 
 function sendToggleGrowLEDCommand(){
-    websocket.send("LED_TOGGLE")
+    websocket.send("LED_FLASHRED")
 }

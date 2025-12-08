@@ -76,3 +76,23 @@ authCredentials getNetworkAuth(uint8_t network_index){
   auth.pswd = String(doc[networkKey]["password"].as<const char*>());
   return auth;
 }
+
+void addWateringLog(JsonObject newLog){
+  File file = SPIFFS.open("/watering-data.json", "r");
+  if (!file) {
+    Serial.println("File not found");
+    return;
+  }
+
+  // Parse Exisitng JSON
+  DynamicJsonDocument doc(4096);
+  DeserializdError err = deserializeJson(doc, file);
+  file.close();
+  if (err) {
+      Serial.println("JSON parse error");
+      return;
+  }
+  
+  
+  
+}

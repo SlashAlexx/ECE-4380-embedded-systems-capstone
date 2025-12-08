@@ -29,6 +29,9 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len){
     data[len] = 0;
     String msg = (char*)data;
 
+    Serial.print("Printing to UART: ");
+    Serial.println(msg);
+
     Serial2.print(msg);
     Serial2.print("\n");
   }
@@ -95,7 +98,7 @@ void setup() {
       Serial.println("STM32 UART Connection Established");
   } else {
       Serial.println("Unable to establish UART Connection with STM32");
-      while (1);
+      //while (1);
   }
 
   // -- Init WiFi Connection ---
@@ -115,7 +118,7 @@ void setup() {
   });
   
   // Serve static files
-  webserver.serveStatic("/static", SPIFFS, "/");
+  webserver.serveStatic("/", SPIFFS, "/");
   webserver.begin();
 }
 
