@@ -1,4 +1,0 @@
-../Core/Src/relay_pump.c:4:6:Pump_Init	1
-../Core/Src/relay_pump.c:23:6:Pump_On	1
-../Core/Src/relay_pump.c:30:6:Pump_Off	1
-../Core/Src/relay_pump.c:37:6:Pump_Run2s	1
