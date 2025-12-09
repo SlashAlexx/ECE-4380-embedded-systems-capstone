@@ -47,8 +47,21 @@ body {
     justify-content:end;
     color: red;
 }
-
 #ManualWaterButton{
+    background-color: #535353;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    width: 120%;
+    height: 42px;
+    margin-top: 8px;
+}
+
+#ToggleLEDButton:hover{
+    cursor:pointer;
+}
+
+#ToggleLEDButton{
     background-color: #535353;
     color: white;
     border: 0;

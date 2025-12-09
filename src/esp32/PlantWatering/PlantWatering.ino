@@ -59,56 +59,43 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
 
 void processUART(String jsonStr){
 
-  Serial.print("Recived UART Message: ");
+  // ---- RAW JSON PRINT ----
+  Serial.print("UART RAW JSON: ");
   Serial.println(jsonStr);
+  Serial.println("------------------------");
 
   StaticJsonDocument<1024> incoming;
   DeserializationError err = deserializeJson(incoming, jsonStr);
   if (err) {
-    Serial.println("JSON parse error");
+    Serial.print("JSON parse error: ");
+    Serial.println(err.f_str());
     return;
   }
 
-  // Send to SPIFFS
-  if (incoming["MoistureLevel"]) addJsonMoisture(incoming["MoistureLevel"]);
-  else if (incoming["PowerData"]) addJsonPowerReading(incoming["PowerData"]);
-  else if (incoming["WateringLog"]) appendIncomingWateringLog(jsonStr);
+  if (incoming.containsKey("MoistureLevel")) {
+      addJsonMoisture(incoming["MoistureLevel"]);
+  }
+  else if (incoming.containsKey("GrowLEDData")) {
+      addJsonPowerReading(incoming["PowerData"]);
+  }
+  else if (incoming.containsKey("ManualWateringLog")) {
+      addPumpWateringLog(true, &ws);
+  }
+  else if (incoming.containsKey("AutoWateringLog")) {
+      addPumpWateringLog(false, &ws);
+  }
+  else {
+      Serial.println("Unknown JSON object received");
+  }
 
   String wsPayload;
   serializeJson(incoming, wsPayload);
-  ws.textAll(wsPayload); // send to all connected clients
-      
+  ws.textAll(wsPayload);
 }
 
 void setup() {
   Serial.begin(115200); // Serial Debugging
   Serial2.begin(115200, SERIAL_8N1, UART2_RX, UART2_TX); // STM32 UART Connection
-
-  // --- Confirm STM32 UART Connection ---
-  Serial2.println("ACK");
-
-  String UART_ACK = "";
-  unsigned long t0 = millis();
-  while (millis() - t0 < 2000) {  // 2-second timeout
-      if (Serial2.available()) {
-          char c = Serial2.read();
-          if (c == '\n') {
-              UART_ACK = receivedUART;
-              break;
-          } else {
-              receivedUART += c;
-          }
-      }
-  }
-
-  receivedUART = "";
-  UART_ACK.trim();
-  if (UART_ACK == "ACK") {
-      Serial.println("STM32 UART Connection Established");
-  } else {
-      Serial.println("Unable to establish UART Connection with STM32");
-      //while (1);
-  }
 
   // -- Init WiFi Connection ---
   initializeFilesystem();
@@ -125,12 +112,15 @@ void setup() {
   webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
       request->send(SPIFFS, "/index.html", "text/html");
   });
-  
-  // Serve static files
   webserver.serveStatic("/", SPIFFS, "/");
   webserver.begin();
+
+  configTime(0, 0, "pool.ntp.org", "time.nist.gov"); // NTP servers
+  setenv("TZ", "CST6CDT", 1); // CST with DST
+  tzset();  
 }
 
+unsigned long lastWiFiCheck = 0;
 void loop() {
 
   // Continuously check for incoming UART data
@@ -141,6 +131,14 @@ void loop() {
       receivedUART = ""; // Clear
     }
     else receivedUART += c;
+  }
+
+  if (millis() - lastWiFiCheck > 5000) { // check every 5s
+      lastWiFiCheck = millis();
+      if(WiFi.status() != WL_CONNECTED) {
+          Serial.println("WiFi disconnected, reconnecting...");
+          beginWiFiConnection(); // attempt reconnect
+      }
   }
 
   ws.cleanupClients();

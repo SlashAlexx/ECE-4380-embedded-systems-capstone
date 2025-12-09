@@ -7,3 +7,5 @@
 const uint8_t CONNECTION_RETRIES = 10;
 
 bool beginWiFiConnection();
+String getTimeString();
+String getDateString();

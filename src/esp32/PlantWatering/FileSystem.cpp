@@ -2,6 +2,7 @@
 // Alex Roberts
 
 #include "include/FileSystem.hpp"
+#include "include/network.hpp"
 
 #include <FS.h>
 #include <SPIFFS.h>
@@ -86,13 +87,13 @@ void addJsonMoisture(uint8_t value){
     deserializeJson(doc, file);
     file.close();
 
-    doc["MoistureLevel"] = value;
-
-    JsonArray arr = doc["MoistureData"].as<JsonArray>();
+    // Handle No Data Yet
+    JsonArray arr = doc["MoistureLevel"].as<JsonArray>();
     if (arr.isNull()) {
-        arr = doc.createNestedArray("MoistureData");
+        arr = doc.createNestedArray("MoistureLevel");
     }
     arr.add(value);
+
 
     file = SPIFFS.open("/watering-data.json", "w");
     serializeJson(doc, file);
@@ -108,9 +109,9 @@ void addJsonPowerReading(uint16_t value){
     file.close();
 
     // Handle No Data Yet
-    JsonArray arr = doc["PowerData"].as<JsonArray>();
+    JsonArray arr = doc["GrowLEDPowerData"].as<JsonArray>();
     if (arr.isNull()) {
-        arr = doc.createNestedArray("PowerData");
+        arr = doc.createNestedArray("GrowLEDPowerData");
     }
     arr.add(value);
 
@@ -162,4 +163,37 @@ void appendIncomingWateringLog(String jsonStr){
     serializeJson(doc, file);
     file.close();
     Serial.println("New watering log added successfully");
+}
+
+
+void addPumpWateringLog(bool isManual, AsyncWebSocket* ws) {
+  
+    StaticJsonDocument<256> logDoc;
+    JsonObject root = logDoc.createNestedObject("WateringLog");
+    JsonObject entry = root.createNestedObject("Log");
+
+    entry["Date"] = getDateString();
+    entry["Time"] = getTimeString();
+    entry["Amount"] = 1;
+    entry["IsManual"] = isManual;
+
+    // Save to SPIFFS
+    String jsonStr;
+    serializeJson(logDoc, jsonStr);
+    appendIncomingWateringLog(jsonStr);
+
+    // Push to Websocket Clients in real time
+    if (ws != nullptr) {
+        DynamicJsonDocument wsDoc(256);
+        JsonObject wsRoot = wsDoc.createNestedObject("WateringLogs");
+        JsonObject logCopy = wsRoot.createNestedObject("Log0");
+        logCopy["Date"] = entry["Date"];
+        logCopy["Time"] = entry["Time"];
+        logCopy["Amount"] = entry["Amount"];
+        logCopy["IsManual"] = entry["IsManual"];
+
+        String wsPayload;
+        serializeJson(wsDoc, wsPayload);
+        ws->textAll(wsPayload);
+    }
 }

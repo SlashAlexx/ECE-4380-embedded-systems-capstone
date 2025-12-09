@@ -9,6 +9,9 @@ let powerData = [];
 let moistureGraph;
 let moistureData = [];
 
+let LEDState = true;
+let LEDStateButton;
+
 function initWebSocket(){
     console.log("Trying to open a WebSocket connection...");
     websocket = new WebSocket(gateway);
@@ -26,47 +29,69 @@ function onClose(event) {
     setTimeout(initWebSocket, 2000);
 }
 
+let firstMoistureReceived = false;
 function onMessage(event){
-    console.log("Received Message From ESP32 Client");
-    console.log(event.data);
-    var obj = JSON.parse(event.data);
+    const raw = event.data.trim(); // remove whitespace/newlines
+    if (!raw) return;
 
-    if (obj.MoistureLevel){
-        var moistureLevel = obj.MoistureLevel;
-        document.getElementById("MoistureLevelValue").textContent = `Moisture Level: ${moistureLevel}%`;
-        drawMoistureGauge(moistureLevel);
+    try {
+        const obj = JSON.parse(raw);
+        console.log(JSON.stringify(obj));
 
-        updateMoistureGraph(obj.MoistureLevel);
+        if (obj.MoistureLevel !== undefined) {
+            let moistureLevel = Number(obj.MoistureLevel);
+
+            if (!isNaN(moistureLevel)) {
+                firstMoistureReceived = true;
+            }
+
+            if (firstMoistureReceived) {
+                let flippedMoisture = 1 - moistureLevel;
+                flippedMoisture = Math.min(Math.max(flippedMoisture, 0), 1);
+                updateMoistureGraph(flippedMoisture);
+            }
+        } else if (obj.GrowLEDPower !== undefined) {
+            if (typeof obj.GrowLEDPower === "number") {
+                updatePowerGraph(obj.GrowLEDPower);
+            } else if (Array.isArray(obj.GrowLEDPower)) {
+                obj.GrowLEDPower.forEach(v => updatePowerGraph(v));
+            }
+        } else if (obj.WateringLogs) {
+            const logs = obj.WateringLogs;
+            const ul = document.getElementById("WateringLogsTimes");
+
+            Object.keys(logs)
+                .sort((a,b) => parseInt(b.replace("Log","")) - parseInt(a.replace("Log","")))
+                .forEach(key => {
+                    const log = logs[key];
+                    // Skip the counter property if it exists
+                    if (key === "NewLogIndex") return;
+
+                    const li = document.createElement("li");
+                    li.textContent = `${log.Date} at ${log.Time} — ${log.Amount} oz (${log.IsManual ? "Manual" : "Automatic"})`;
+                    ul.prepend(li);  // prepend so newest log is at the top
+                });
+        } else if (obj.MoisturePercent){
+            const val = obj.MoisturePercent;
+            document.getElementById("MoistureLevelValue").textContent = `Estimated Moisture: ${val}%`;
+            drawMoistureGauge(val);
+        }
+        
+        else {
+            console.log("Unknown JSON object received:", obj);
+        }
+    } catch (err) {
+        console.error("Failed to parse JSON:", raw, err);
     }
-    
-    if (obj.WateringLogs) {
-        const logs = obj.WateringLogs;
-        const ul = document.getElementById("WateringLogsTimes");
-        ul.innerHTML = ""; // Clear previous entries
-
-        Object.keys(logs)
-            .filter(k => k.startsWith("Log"))
-            .sort((a, b) => parseInt(b.replace("Log","")) - parseInt(a.replace("Log",""))) 
-            .forEach(key => {
-                const log = logs[key];
-
-                const li = document.createElement("li");
-                li.textContent = `${log.Date} at ${log.Time} — ${log.Amount} oz (${log.IsManual ? "Manual" : "Automatic"})`;
-
-                ul.appendChild(li);
-            });
-    }
-
-    if (obj.GrowLEDPower){
-        updatePowerGraph(obj.GrowLEDPower);
-    }
-    
 }
 
 function onLoad(event){
     initWebSocket();
     initPowerGraph();
     initMoistureGraph();
+
+    LEDStateButton = document.getElementById("ToggleLEDButton");
+    LEDStateButton.style.backgroundColor = "#00891bff";
 }
 
 // Set and Display Time
@@ -119,7 +144,7 @@ function initPowerGraph(){
         data: {
             labels: [],
             datasets: [{
-                label: "Power",
+                label: "Power [mW]",
                 data: [],
                 borderWidth: 2,
                 tension: 0.3
@@ -136,7 +161,7 @@ function initPowerGraph(){
     });
 }
 
-let powerHistoryMax = 100;
+let powerHistoryMax = 50;
 function updatePowerGraph(value){
 
     // Store Data
@@ -160,7 +185,7 @@ function initMoistureGraph(){
         data: {
             labels: [],
             datasets: [{
-                label: "Moisture",
+                label: "Moisture %",
                 data: [],
                 borderWidth: 2,
                 tension: 0.3
@@ -206,5 +231,13 @@ function sendManualWaterCommand(){
 }
 
 function sendToggleGrowLEDCommand(){
-    websocket.send("LED_FLASHRED")
+    if (!LEDStateButton) return; // safety
+    if (!LEDState) {
+        LEDStateButton.style.backgroundColor = "#00891bff";
+        if (websocket && websocket.readyState === WebSocket.OPEN) websocket.send("LED_FULL");
+    } else {
+        LEDStateButton.style.backgroundColor = "#df0404ff";
+        if (websocket && websocket.readyState === WebSocket.OPEN) websocket.send("LED_DIM0");
+    }
+    LEDState = !LEDState;
 }

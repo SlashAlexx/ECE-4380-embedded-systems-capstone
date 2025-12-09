@@ -1,34 +1,7 @@
 {
-    "MoistureLevel": 80,
-    "MoistureData":[
-        70,
-        75,
-        62,
-        50,
-        81,
-        76,
-        79,
-        73
-    ],
-    "PowerData":[
-        4,
-        10,
-        25,
-        2
-    ],
+    "MoistureLevel": 0.0,
+    "GrowLEDPowerData": 0.0,
     "WateringLogs":{
-        "NewLogIndex": 2,
-        "Log1":{
-            "Date": "11/6",
-            "Time": "8:14 PM",
-            "Amount": 4,
-            "IsManual": true
-        },
-        "Log0":{
-            "Date": "11/5",
-            "Time": "6:00 PM",
-            "Amount": 2,
-            "IsManual": false
-        }
+        "NewLogIndex": 0
     }
 }

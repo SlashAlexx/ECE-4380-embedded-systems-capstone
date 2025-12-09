@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 #include <string.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
 
 typedef struct authCredentials{
     String ssid = "";
@@ -19,3 +21,4 @@ authCredentials getNetworkAuth(uint8_t network_index);
 void addJsonMoisture(uint8_t value);
 void addJsonPowerReading(uint16_t value);
 void appendIncomingWateringLog(String jsonStr);
+void addPumpWateringLog(bool isManual, AsyncWebSocket* ws = nullptr);

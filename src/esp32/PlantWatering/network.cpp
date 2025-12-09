@@ -33,3 +33,21 @@ bool beginWiFiConnection() {
     Serial.println("Unable to connect to any known network.");
     return false;
 }
+
+String getDateString() {
+    struct tm timeinfo;
+    if (!getLocalTime(&timeinfo)) return "Unknown";
+
+    char buffer[16];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d", &timeinfo);
+    return String(buffer);
+}
+
+String getTimeString() {
+    struct tm timeinfo;
+    if (!getLocalTime(&timeinfo)) return "Unknown";
+
+    char buffer[16];
+    strftime(buffer, sizeof(buffer), "%I:%M %p", &timeinfo);
+    return String(buffer);
+}
