@@ -97,7 +97,6 @@ void setup() {
   Serial.begin(115200); // Serial Debugging
   Serial2.begin(115200, SERIAL_8N1, UART2_RX, UART2_TX); // STM32 UART Connection
 
-  // -- Init WiFi Connection ---
   initializeFilesystem();
   
   bool wifi_status = beginWiFiConnection();
@@ -116,7 +115,7 @@ void setup() {
   webserver.begin();
 
   configTime(0, 0, "pool.ntp.org", "time.nist.gov"); // NTP servers
-  setenv("TZ", "CST6CDT", 1); // CST with DST
+  setenv("TZ", "CST6CDT", 1); // CST
   tzset();  
 }
 

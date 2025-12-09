@@ -50,13 +50,17 @@ function onMessage(event){
                 flippedMoisture = Math.min(Math.max(flippedMoisture, 0), 1);
                 updateMoistureGraph(flippedMoisture);
             }
-        } else if (obj.GrowLEDPower !== undefined) {
+
+        } 
+        else if (obj.GrowLEDPower !== undefined) {
             if (typeof obj.GrowLEDPower === "number") {
                 updatePowerGraph(obj.GrowLEDPower);
             } else if (Array.isArray(obj.GrowLEDPower)) {
                 obj.GrowLEDPower.forEach(v => updatePowerGraph(v));
             }
-        } else if (obj.WateringLogs) {
+
+        } 
+        else if (obj.WateringLogs) {
             const logs = obj.WateringLogs;
             const ul = document.getElementById("WateringLogsTimes");
 
@@ -71,12 +75,12 @@ function onMessage(event){
                     li.textContent = `${log.Date} at ${log.Time} — ${log.Amount} oz (${log.IsManual ? "Manual" : "Automatic"})`;
                     ul.prepend(li);  // prepend so newest log is at the top
                 });
-        } else if (obj.MoisturePercent){
+        } 
+        else if (obj.MoisturePercent){
             const val = obj.MoisturePercent;
             document.getElementById("MoistureLevelValue").textContent = `Estimated Moisture: ${val}%`;
             drawMoistureGauge(val);
         }
-        
         else {
             console.log("Unknown JSON object received:", obj);
         }
