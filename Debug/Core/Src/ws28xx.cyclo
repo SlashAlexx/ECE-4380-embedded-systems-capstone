@@ -1,5 +1,5 @@
-../Core/Src/ws28xx.c:8:13:WS28XX_FillPWMBuffer	6
-../Core/Src/ws28xx.c:39:6:WS28XX_Init	3
-../Core/Src/ws28xx.c:63:6:WS28XX_SetPixel_RGB	2
-../Core/Src/ws28xx.c:80:6:WS28XX_Update	2
-../Core/Src/ws28xx.c:103:6:WS28XX_DMA_Complete_Callback	1
+../Core/Src/ws28xx.c:6:13:WS28XX_FillPWMBuffer	6
+../Core/Src/ws28xx.c:35:6:WS28XX_Init	3
+../Core/Src/ws28xx.c:57:6:WS28XX_SetPixel_RGB	2
+../Core/Src/ws28xx.c:71:6:WS28XX_Update	2
+../Core/Src/ws28xx.c:92:6:WS28XX_DMA_Complete_Callback	1

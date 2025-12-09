@@ -37,15 +37,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  0002c562  00000000  00000000  0003543b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00022779  00000000  00000000  0006199d  2**0
+ 17 .debug_line   00022768  00000000  00000000  0006199d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0010b773  00000000  00000000  00084116  2**0
+ 18 .debug_str    0010b773  00000000  00000000  00084105  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  0018f889  2**0
+ 19 .comment      00000043  00000000  00000000  0018f878  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  0000839c  00000000  00000000  0018f8cc  2**2
+ 20 .debug_frame  0000839c  00000000  00000000  0018f8bc  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000057  00000000  00000000  00197c68  2**0
+ 21 .debug_line_str 00000057  00000000  00000000  00197c58  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1237,10 +1237,10 @@ Disassembly of section .text:
  8000ef2:	bf00      	nop
 
 08000ef4 <SetPixel_BGR>:
-/****************************************************
- * BGR-Corrected Pixel Setter
- * Your LED STRIP uses (B, G, R)
- ****************************************************/
+
+extern TIM_HandleTypeDef htim3;
+
+
 void SetPixel_BGR(uint16_t index, uint8_t r, uint8_t g, uint8_t b)
 {
  8000ef4:	b590      	push	{r4, r7, lr}
@@ -1276,9 +1276,7 @@ void SetPixel_BGR(uint16_t index, uint8_t r, uint8_t g, uint8_t b)
 
 08000f30 <init_grow_leds>:
 
-/****************************************************
- * Initialization
- ****************************************************/
+
 void init_grow_leds(void)
 {
  8000f30:	b580      	push	{r7, lr}
@@ -1323,9 +1321,7 @@ void init_grow_leds(void)
 
 08000f7c <update_grow_leds>:
 
-/****************************************************
- * MAIN GROW MODE — PURPLE (Red + Blue)
- ****************************************************/
+
 void update_grow_leds(uint8_t brightness)
 {
  8000f7c:	b580      	push	{r7, lr}
@@ -1338,7 +1334,7 @@ void update_grow_leds(uint8_t brightness)
  8000f88:	79fb      	ldrb	r3, [r7, #7]
  8000f8a:	7013      	strb	r3, [r2, #0]
 
-    // PURPLE = RED + BLUE
+
     for (uint16_t i = 0; i < WS_LED_COUNT; i++)
  8000f8c:	2300      	movs	r3, #0
  8000f8e:	81fb      	strh	r3, [r7, #14]
@@ -1371,9 +1367,7 @@ void update_grow_leds(uint8_t brightness)
 
 08000fc0 <set_grow_purple>:
 
-/****************************************************
- * Explicit purple intensity mode
- ****************************************************/
+
 void set_grow_purple(uint8_t intensity)
 {
  8000fc0:	b580      	push	{r7, lr}
@@ -1520,9 +1514,7 @@ void flash_error_led(void)
 
 080010b4 <grow_set_brightness>:
 
-/****************************************************
- * NEW — Generic brightness setter
- ****************************************************/
+
 void grow_set_brightness(uint8_t brightness)
 {
  80010b4:	b580      	push	{r7, lr}
@@ -1543,9 +1535,7 @@ void grow_set_brightness(uint8_t brightness)
 
 080010d0 <grow_dim_to_safe>:
 
-/****************************************************
- * NEW — Safe dimming
- ****************************************************/
+
 void grow_dim_to_safe(void)
 {
  80010d0:	b580      	push	{r7, lr}
@@ -1571,9 +1561,7 @@ void grow_dim_to_safe(void)
 
 080010f4 <grow_full_brightness>:
 
-/****************************************************
- * NEW — Full brightness
- ****************************************************/
+
 void grow_full_brightness(void)
 {
  80010f4:	b580      	push	{r7, lr}
@@ -1591,9 +1579,7 @@ void grow_full_brightness(void)
 
 0800110c <GrowLight_CurrentLimit_Callback>:
 
-/****************************************************
- * REQUIRED CALLBACK for overcurrent protection
- ****************************************************/
+
 void GrowLight_CurrentLimit_Callback(float current_mA)
 {
  800110c:	b580      	push	{r7, lr}
@@ -1615,7 +1601,7 @@ void GrowLight_CurrentLimit_Callback(float current_mA)
 
 0800112c <INA219_WriteRegister>:
 
-// Cached reading
+
 static INA219_Data_t last_read;
 
 static void INA219_WriteRegister(uint8_t reg, uint16_t value)
@@ -1711,7 +1697,7 @@ void INA219_Init(void)
  80011c4:	4809      	ldr	r0, [pc, #36]	@ (80011ec <INA219_Init+0x2c>)
  80011c6:	f001 fcfb 	bl	8002bc0 <Debug_Print>
 
-    // Set calibration register
+
     INA219_WriteRegister(INA219_CALIB_REG, calibrationValue);
  80011ca:	4b09      	ldr	r3, [pc, #36]	@ (80011f0 <INA219_Init+0x30>)
  80011cc:	881b      	ldrh	r3, [r3, #0]
@@ -1719,12 +1705,11 @@ void INA219_Init(void)
  80011d0:	2005      	movs	r0, #5
  80011d2:	f7ff ffab 	bl	800112c <INA219_WriteRegister>
 
-    // Config: Shunt & bus, continuous mode
     INA219_WriteRegister(INA219_CONFIG_REG,
  80011d6:	f240 119f 	movw	r1, #415	@ 0x19f
  80011da:	2000      	movs	r0, #0
  80011dc:	f7ff ffa6 	bl	800112c <INA219_WriteRegister>
-        0x019F);  // 32V, 2A, 12-bit samples
+        0x019F);
 
     Debug_Print("INA219: Ready.\r\n");
  80011e0:	4804      	ldr	r0, [pc, #16]	@ (80011f4 <INA219_Init+0x34>)
@@ -1807,9 +1792,7 @@ void INA219_Read(INA219_Data_t *out)
  800128e:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
  8001290:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
 
-    // ==========================
-    // OVERCURRENT CHECK
-    // ==========================
+
     if (out->current_mA >= INA219_MAX_CURRENT_MA)
  8001294:	687b      	ldr	r3, [r7, #4]
  8001296:	edd3 7a02 	vldr	s15, [r3, #8]
@@ -1847,25 +1830,25 @@ int main(void)
 {
  80012d4:	b580      	push	{r7, lr}
  80012d6:	af00      	add	r7, sp, #0
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
  80012d8:	f001 fe1e 	bl	8002f18 <HAL_Init>
+
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
 
-  /* Configure the system clock */
   SystemClock_Config();
  80012dc:	f000 f868 	bl	80013b0 <SystemClock_Config>
+
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
  80012e0:	f000 fa62 	bl	80017a8 <MX_GPIO_Init>
   MX_DMA_Init();
@@ -1887,7 +1870,7 @@ int main(void)
  8001302:	f04f 4090 	mov.w	r0, #1207959552	@ 0x48000000
  8001306:	f003 fe01 	bl	8004f0c <HAL_GPIO_WritePin>
 
-  // ========== MODULE INITIALIZATION ==========
+
       Debug_Print("System Boot...\r\n");
  800130a:	4820      	ldr	r0, [pc, #128]	@ (800138c <main+0xb8>)
  800130c:	f001 fc58 	bl	8002bc0 <Debug_Print>
@@ -1897,8 +1880,8 @@ int main(void)
       Pump_Init();
  8001314:	f000 fbc8 	bl	8001aa8 <Pump_Init>
 
-      // ----- GROW LED TEST SEQUENCE -----
-      init_grow_leds();                // 1) init + show blue
+
+      init_grow_leds();
  8001318:	f7ff fe0a 	bl	8000f30 <init_grow_leds>
 
       INA219_Init();
@@ -1908,14 +1891,13 @@ int main(void)
  8001320:	481b      	ldr	r0, [pc, #108]	@ (8001390 <main+0xbc>)
  8001322:	f001 fc4d 	bl	8002bc0 <Debug_Print>
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-      /* USER CODE BEGIN WHILE */
-      // ----- STATE + UART + RTOS SETUP -----
-      State_Init();        // sets AUTO mode, WET, no FAIL, LED purple
+
+  /* USER CODE END 2 */
+
+      State_Init();
  8001326:	f001 f8cd 	bl	80024c4 <State_Init>
 
-      UART_Init();         // starts UART1 RX interrupt for command parsing
+      UART_Init();
  800132a:	f001 fa75 	bl	8002818 <UART_Init>
 
       RTOS_Init();
@@ -1924,34 +1906,32 @@ int main(void)
  8001332:	f001 fc95 	bl	8002c60 <UQ_Init>
 
 
-      // Add tasks: (function, initialState, period_ms)
-      // Period values assume your RTOS template uses ms units.
-      RTOS_AddTask(Task_UART,      1, 500);   // every 50 ms
+      RTOS_AddTask(Task_UART,      1, 500);
  8001336:	f44f 72fa 	mov.w	r2, #500	@ 0x1f4
  800133a:	2101      	movs	r1, #1
  800133c:	4815      	ldr	r0, [pc, #84]	@ (8001394 <main+0xc0>)
  800133e:	f000 fc4f 	bl	8001be0 <RTOS_AddTask>
-      RTOS_AddTask(Task_Moisture,  1, 5000);   // every 5000 ms
+      RTOS_AddTask(Task_Moisture,  1, 5000);
  8001342:	f241 3288 	movw	r2, #5000	@ 0x1388
  8001346:	2101      	movs	r1, #1
  8001348:	4813      	ldr	r0, [pc, #76]	@ (8001398 <main+0xc4>)
  800134a:	f000 fc49 	bl	8001be0 <RTOS_AddTask>
-      RTOS_AddTask(Task_INA219,    1, 5000);   // every 5000 ms
+      RTOS_AddTask(Task_INA219,    1, 5000);
  800134e:	f241 3288 	movw	r2, #5000	@ 0x1388
  8001352:	2101      	movs	r1, #1
  8001354:	4811      	ldr	r0, [pc, #68]	@ (800139c <main+0xc8>)
  8001356:	f000 fc43 	bl	8001be0 <RTOS_AddTask>
-      RTOS_AddTask(Task_Pump,      1, 5000);   // every 200 ms
+      RTOS_AddTask(Task_Pump,      1, 5000);
  800135a:	f241 3288 	movw	r2, #5000	@ 0x1388
  800135e:	2101      	movs	r1, #1
  8001360:	480f      	ldr	r0, [pc, #60]	@ (80013a0 <main+0xcc>)
  8001362:	f000 fc3d 	bl	8001be0 <RTOS_AddTask>
-      RTOS_AddTask(Task_LED,       1, 10000);   // every 200 ms
+      RTOS_AddTask(Task_LED,       1, 10000);
  8001366:	f242 7210 	movw	r2, #10000	@ 0x2710
  800136a:	2101      	movs	r1, #1
  800136c:	480d      	ldr	r0, [pc, #52]	@ (80013a4 <main+0xd0>)
  800136e:	f000 fc37 	bl	8001be0 <RTOS_AddTask>
-      RTOS_AddTask(Task_Heartbeat, 1, 2000);  // every 2 s (debug)
+      RTOS_AddTask(Task_Heartbeat, 1, 2000);
  8001372:	f44f 62fa 	mov.w	r2, #2000	@ 0x7d0
  8001376:	2101      	movs	r1, #1
  8001378:	480b      	ldr	r0, [pc, #44]	@ (80013a8 <main+0xd4>)
@@ -1962,10 +1942,9 @@ int main(void)
  8001380:	f001 fc1e 	bl	8002bc0 <Debug_Print>
 
 
-
       while (1)
       {
-    	  RTOS_Run();// small CPU break
+    	  RTOS_Run();
  8001384:	f000 fc84 	bl	8001c90 <RTOS_Run>
  8001388:	e7fc      	b.n	8001384 <main+0xb0>
  800138a:	bf00      	nop
@@ -1980,10 +1959,10 @@ int main(void)
  80013ac:	0800d7c4 	.word	0x0800d7c4
 
 080013b0 <SystemClock_Config>:
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+
+  /* USER CODE END 3 */
+
+
 void SystemClock_Config(void)
 {
  80013b0:	b580      	push	{r7, lr}
@@ -2004,8 +1983,7 @@ void SystemClock_Config(void)
  80013ce:	60da      	str	r2, [r3, #12]
  80013d0:	611a      	str	r2, [r3, #16]
 
-  /** Configure the main internal regulator output voltage
-  */
+
   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
  80013d2:	f44f 7000 	mov.w	r0, #512	@ 0x200
  80013d6:	f004 fba7 	bl	8005b28 <HAL_PWREx_ControlVoltageScaling>
@@ -2017,9 +1995,6 @@ void SystemClock_Config(void)
  80013e0:	f000 fa4a 	bl	8001878 <Error_Handler>
   }
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
  80013e4:	2302      	movs	r3, #2
  80013e6:	617b      	str	r3, [r7, #20]
@@ -2062,8 +2037,6 @@ void SystemClock_Config(void)
  800141e:	f000 fa2b 	bl	8001878 <Error_Handler>
   }
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
  8001422:	230f      	movs	r3, #15
  8001424:	603b      	str	r3, [r7, #0]
@@ -2950,7 +2923,7 @@ float MoistureModel_GetPercent(void)
  80018fc:	2300      	movs	r3, #0
  80018fe:	603b      	str	r3, [r7, #0]
  8001900:	e00a      	b.n	8001918 <MoistureModel_GetPercent+0x34>
-        sum += buffer[i];     // sum of WET readings
+        sum += buffer[i];
  8001902:	4a17      	ldr	r2, [pc, #92]	@ (8001960 <MoistureModel_GetPercent+0x7c>)
  8001904:	683b      	ldr	r3, [r7, #0]
  8001906:	4413      	add	r3, r2
@@ -2969,7 +2942,6 @@ float MoistureModel_GetPercent(void)
  800191e:	429a      	cmp	r2, r3
  8001920:	dbef      	blt.n	8001902 <MoistureModel_GetPercent+0x1e>
 
-    // percent = (#wet / #samples) * 100
     return (sum * 100.0f) / filled;
  8001922:	687b      	ldr	r3, [r7, #4]
  8001924:	ee07 3a90 	vmov	s15, r3
@@ -2995,10 +2967,10 @@ float MoistureModel_GetPercent(void)
  8001964:	42c80000 	.word	0x42c80000
 
 08001968 <MoistureSensor_Init>:
+
 static uint32_t wet_adc  = 2861;
 static uint32_t dry_adc  = 2871;
 
-// ---------- Initialization ----------
 void MoistureSensor_Init(void)
 {
  8001968:	b580      	push	{r7, lr}
@@ -3014,7 +2986,6 @@ void MoistureSensor_Init(void)
 
 0800197c <Moisture_Read>:
 
-// ---------- Read + Oversample ----------
 MoistureReading_t Moisture_Read(void)
 {
  800197c:	b5b0      	push	{r4, r5, r7, lr}
@@ -3072,7 +3043,6 @@ MoistureReading_t Moisture_Read(void)
  80019ce:	4603      	mov	r3, r0
  80019d0:	61fb      	str	r3, [r7, #28]
 
-    // ---------- Moisture % Calculation ----------
     float range = (float)(dry_adc - wet_adc);
  80019d2:	4b32      	ldr	r3, [pc, #200]	@ (8001a9c <Moisture_Read+0x120>)
  80019d4:	681a      	ldr	r2, [r3, #0]
@@ -3126,7 +3096,6 @@ MoistureReading_t Moisture_Read(void)
  8001a58:	ee67 7a87 	vmul.f32	s15, s15, s14
  8001a5c:	edc7 7a05 	vstr	s15, [r7, #20]
 
-    // ---------- Wet/Dry Classification ----------
     uint32_t mid = (wet_adc + dry_adc) / 2;
  8001a60:	4b0f      	ldr	r3, [pc, #60]	@ (8001aa0 <Moisture_Read+0x124>)
  8001a62:	681a      	ldr	r2, [r3, #0]
@@ -3214,7 +3183,7 @@ void Pump_Init(void)
  8001aea:	f04f 4090 	mov.w	r0, #1207959552	@ 0x48000000
  8001aee:	f003 f863 	bl	8004bb8 <HAL_GPIO_Init>
 
-    Pump_Off(); // safe state
+    Pump_Off();
  8001af2:	f000 f81b 	bl	8001b2c <Pump_Off>
 
     Debug_Print("PUMP: Initialized (active LOW)\r\n");
@@ -3230,7 +3199,7 @@ void Pump_Init(void)
 
 08001b0c <Pump_On>:
 
-// Relay ACTIVE LOW → ON = 0
+
 void Pump_On(void)
 {
  8001b0c:	b580      	push	{r7, lr}
@@ -3250,7 +3219,7 @@ void Pump_On(void)
 
 08001b2c <Pump_Off>:
 
-// Relay ACTIVE LOW → OFF = 1
+
 void Pump_Off(void)
 {
  8001b2c:	b580      	push	{r7, lr}
@@ -3270,7 +3239,7 @@ void Pump_Off(void)
 
 08001b4c <Pump_Run2s>:
 
-// Run pump for exactly 2 seconds
+
 void Pump_Run2s(void)
 {
  8001b4c:	b580      	push	{r7, lr}
@@ -3291,7 +3260,6 @@ void Pump_Run2s(void)
  8001b66:	4803      	ldr	r0, [pc, #12]	@ (8001b74 <Pump_Run2s+0x28>)
  8001b68:	f001 f82a 	bl	8002bc0 <Debug_Print>
 
-    // Moisture model update (2 seconds of pumping)
 }
  8001b6c:	bf00      	nop
  8001b6e:	bd80      	pop	{r7, pc}
@@ -3299,10 +3267,10 @@ void Pump_Run2s(void)
  8001b74:	0800d8e8 	.word	0x0800d8e8
 
 08001b78 <RTOS_Init>:
-// Task table
+
 static RTOS_Task_t g_tasks[RTOS_MAX_TASKS];
 
-// ================ RTOS_Init ==================
+
 void RTOS_Init(void)
 {
  8001b78:	b480      	push	{r7}
@@ -3367,7 +3335,7 @@ void RTOS_Init(void)
 
 08001be0 <RTOS_AddTask>:
 
-// ================ RTOS_AddTask ===============
+
 void RTOS_AddTask(RTOS_TaskFunc_t func, uint8_t startActive, uint32_t period_ms)
 {
  8001be0:	b480      	push	{r7}
@@ -3462,7 +3430,7 @@ void RTOS_AddTask(RTOS_TaskFunc_t func, uint8_t startActive, uint32_t period_ms)
 
 08001c74 <RTOS_Tick>:
 
-// ================ RTOS_Tick ==================
+
 void RTOS_Tick(void)
 {
  8001c74:	b480      	push	{r7}
@@ -3482,7 +3450,7 @@ void RTOS_Tick(void)
 
 08001c90 <RTOS_Run>:
 
-// ================ RTOS_Run ===================
+
 void RTOS_Run(void)
 {
  8001c90:	b580      	push	{r7, lr}
@@ -3545,7 +3513,7 @@ void RTOS_Run(void)
  8001cec:	330c      	adds	r3, #12
  8001cee:	68ba      	ldr	r2, [r7, #8]
  8001cf0:	601a      	str	r2, [r3, #0]
-                g_tasks[i].func();   // run task
+                g_tasks[i].func();
  8001cf2:	4a09      	ldr	r2, [pc, #36]	@ (8001d18 <RTOS_Run+0x88>)
  8001cf4:	68fb      	ldr	r3, [r7, #12]
  8001cf6:	011b      	lsls	r3, r3, #4
@@ -3563,7 +3531,7 @@ void RTOS_Run(void)
         }
     }
 
-    // Optional: tiny idle hint
+
     __NOP();
  8001d0a:	bf00      	nop
 }
@@ -3575,10 +3543,10 @@ void RTOS_Run(void)
  8001d18:	20000d24 	.word	0x20000d24
 
 08001d1c <Task_UART>:
+#include "moisture_model.h"
+#include <stdio.h>
+#include "moisture_sensor.h"
 
-// ===============================
-// 1) UART task
-// ===============================
 void Task_UART(void)
 {
  8001d1c:	b580      	push	{r7, lr}
@@ -3591,9 +3559,7 @@ void Task_UART(void)
 
 08001d28 <Task_Moisture>:
 
-// ===============================
-// 2) Moisture task
-// ===============================
+
 void Task_Moisture(void)
 {
  8001d28:	b580      	push	{r7, lr}
@@ -3608,13 +3574,11 @@ void Task_Moisture(void)
  8001d36:	4b21      	ldr	r3, [pc, #132]	@ (8001dbc <Task_Moisture+0x94>)
  8001d38:	701a      	strb	r2, [r3, #0]
 
-    // Read sensor
     MoistureReading_t r = Moisture_Read();
  8001d3a:	463b      	mov	r3, r7
  8001d3c:	4618      	mov	r0, r3
  8001d3e:	f7ff fe1d 	bl	800197c <Moisture_Read>
 
-    // Feed "wet or dry" into smoothing model
     MoistureModel_AddState(r.state == MOISTURE_WET);
  8001d42:	7b3b      	ldrb	r3, [r7, #12]
  8001d44:	2b01      	cmp	r3, #1
@@ -3625,12 +3589,10 @@ void Task_Moisture(void)
  8001d4e:	4618      	mov	r0, r3
  8001d50:	f7ff fd98 	bl	8001884 <MoistureModel_AddState>
 
-    // Get smoothed moisture percent
     float percent = MoistureModel_GetPercent();
  8001d54:	f7ff fdc6 	bl	80018e4 <MoistureModel_GetPercent>
  8001d58:	ed87 0a05 	vstr	s0, [r7, #20]
 
-    // Print every 10 cycles
     if (counter >= 10)
  8001d5c:	4b17      	ldr	r3, [pc, #92]	@ (8001dbc <Task_Moisture+0x94>)
  8001d5e:	781b      	ldrb	r3, [r3, #0]
@@ -3679,7 +3641,6 @@ void Task_Moisture(void)
  8001dac:	701a      	strb	r2, [r3, #0]
     }
 
-    // Update state machine (no args needed)
     State_UpdateMoisture();
  8001dae:	f000 fc05 	bl	80025bc <State_UpdateMoisture>
 }
@@ -3699,9 +3660,8 @@ void Task_Moisture(void)
 
 08001ddc <Task_INA219>:
 
-// ===============================
-// 3) INA219 task
-// ===============================
+
+
 void Task_INA219(void)
 {
  8001ddc:	b580      	push	{r7, lr}
@@ -3714,9 +3674,7 @@ void Task_INA219(void)
 
 08001de8 <Task_Pump>:
 
-// ===============================
-// 4) Pump / Main State-Machine
-// ===============================
+
 void Task_Pump(void)
 {
  8001de8:	b580      	push	{r7, lr}
@@ -3737,15 +3695,12 @@ void Task_Pump(void)
 
 08001dfe <Task_LED>:
 
-// ===============================
-// 5) LED task (free for animations)
-// ===============================
+
 void Task_LED(void)
 {
  8001dfe:	b480      	push	{r7}
  8001e00:	af00      	add	r7, sp, #0
 
-    // Your LED code can go here
 }
  8001e02:	bf00      	nop
  8001e04:	46bd      	mov	sp, r7
@@ -3754,9 +3709,7 @@ void Task_LED(void)
 
 08001e0c <Task_Heartbeat>:
 
-// ===============================
-// 6) HEARTBEAT task – debug
-// ===============================
+
 void Task_Heartbeat(void)
 {
  8001e0c:	b580      	push	{r7, lr}
@@ -5038,10 +4991,10 @@ void *_sbrk(ptrdiff_t incr)
  80024c0:	20000fa8 	.word	0x20000fa8
 
 080024c4 <State_Init>:
+MoistureState_t  g_moistState     = MOISTURE_DRY;
+uint32_t         g_pumpCooldownMs = 0;
 
-/************************************************************
- * INITIALIZATION STATE
- ************************************************************/
+
 void State_Init(void)
 {
  80024c4:	b580      	push	{r7, lr}
@@ -5051,12 +5004,12 @@ void State_Init(void)
  80024ca:	4814      	ldr	r0, [pc, #80]	@ (800251c <State_Init+0x58>)
  80024cc:	f000 fb78 	bl	8002bc0 <Debug_Print>
 
-    // LED default
+
     set_grow_purple(255);
  80024d0:	20ff      	movs	r0, #255	@ 0xff
  80024d2:	f7fe fd75 	bl	8000fc0 <set_grow_purple>
 
-    // Initial moisture read
+
     MoistureReading_t m = Moisture_Read();
  80024d6:	f107 0344 	add.w	r3, r7, #68	@ 0x44
  80024da:	4618      	mov	r0, r3
@@ -5108,9 +5061,7 @@ void State_Init(void)
 
 08002538 <State_Auto>:
 
-/************************************************************
- * AUTO MODE — decision logic only
- ************************************************************/
+
 void State_Auto(void)
 {
  8002538:	b580      	push	{r7, lr}
@@ -5119,10 +5070,8 @@ void State_Auto(void)
     Debug_Print("AUTO: Running logic...\r\n");
  800253e:	4813      	ldr	r0, [pc, #76]	@ (800258c <State_Auto+0x54>)
  8002540:	f000 fb3e 	bl	8002bc0 <Debug_Print>
-//    if (g_failState != FAIL_NONE)
-//    {
-//        set_grow_purple(255);
-//    }
+
+
 
     if (g_failState == FAIL_NONE)
  8002544:	4b12      	ldr	r3, [pc, #72]	@ (8002590 <State_Auto+0x58>)
@@ -5142,7 +5091,7 @@ void State_Auto(void)
             Pump_Run2s();
  800255a:	f7ff faf7 	bl	8001b4c <Pump_Run2s>
 
-			// Send Logs to UART on auto water
+
             char msg[128];
             snprintf(msg, sizeof(msg),
  800255e:	463b      	mov	r3, r7
@@ -5186,9 +5135,7 @@ void State_Auto(void)
 
 080025a8 <State_Manual>:
 
-/************************************************************
- * MANUAL MODE
- ************************************************************/
+
 void State_Manual(void)
 {
  80025a8:	b580      	push	{r7, lr}
@@ -5204,9 +5151,7 @@ void State_Manual(void)
 
 080025bc <State_UpdateMoisture>:
 
-/************************************************************
- * UPDATE MOISTURE
- ************************************************************/
+
 void State_UpdateMoisture(void)
 {
  80025bc:	b5b0      	push	{r4, r5, r7, lr}
@@ -5278,9 +5223,7 @@ void State_UpdateMoisture(void)
 
 08002648 <State_UpdatePower>:
 
-/************************************************************
- * UPDATE POWER + FAIL DETECTION
- ************************************************************/
+
 void State_UpdatePower(void)
 {
  8002648:	e92d 43b0 	stmdb	sp!, {r4, r5, r7, r8, r9, lr}
@@ -5414,9 +5357,7 @@ void State_UpdatePower(void)
 
 08002748 <State_GetMode>:
 
-/************************************************************
- * STATE MACHINE – PUBLIC ACCESS
- ************************************************************/
+
 SystemMode_t State_GetMode(void)
 {
  8002748:	b480      	push	{r7}
@@ -5479,10 +5420,10 @@ void State_SetMode(SystemMode_t mode)
  80027a8:	20000dcd 	.word	0x20000dcd
 
 080027ac <State_StateMachineTick>:
+}
 
-/************************************************************
- * STATE MACHINE TICK – called from RTOS Task_Pump
- ************************************************************/
+
+
 void State_StateMachineTick(void)
 {
  80027ac:	b580      	push	{r7, lr}
@@ -5546,10 +5487,10 @@ void SystemInit(void)
  80027f4:	e000ed00 	.word	0xe000ed00
 
 080027f8 <UART_ClearBuffer>:
+static char uart_rx_buffer[128];
+static volatile uint8_t uart_rx_index = 0;
 
-/****************************************************
- * SAFE BUFFER RESET
- ****************************************************/
+
 static void UART_ClearBuffer(void)
 {
  80027f8:	b580      	push	{r7, lr}
@@ -5571,9 +5512,7 @@ static void UART_ClearBuffer(void)
 
 08002818 <UART_Init>:
 
-/****************************************************
- * UART Init
- ****************************************************/
+
 void UART_Init(void)
 {
  8002818:	b580      	push	{r7, lr}
@@ -5594,9 +5533,7 @@ void UART_Init(void)
 
 08002838 <UART_Send>:
 
-/****************************************************
- * UART Send
- ****************************************************/
+
 void UART_Send(const char *msg)
 {
  8002838:	b580      	push	{r7, lr}
@@ -5622,9 +5559,7 @@ void UART_Send(const char *msg)
 
 08002864 <HAL_UART_RxCpltCallback>:
 
-/****************************************************
- * RX Callback
- ****************************************************/
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
  8002864:	b580      	push	{r7, lr}
@@ -5696,9 +5631,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 080028d8 <UART_ProcessReceived>:
 
-/****************************************************
- * COMMAND PROCESSOR
- ****************************************************/
+
 void UART_ProcessReceived(void)
 {
  80028d8:	b580      	push	{r7, lr}
@@ -5711,7 +5644,7 @@ void UART_ProcessReceived(void)
  80028e4:	f000 8087 	beq.w	80029f6 <UART_ProcessReceived+0x11e>
         return;
 
-    // PUMP
+
     if (strcmp(uart_rx_buffer, "PUMP_ON") == 0)       CMD_PumpOn();
  80028e8:	4946      	ldr	r1, [pc, #280]	@ (8002a04 <UART_ProcessReceived+0x12c>)
  80028ea:	4845      	ldr	r0, [pc, #276]	@ (8002a00 <UART_ProcessReceived+0x128>)
@@ -5740,7 +5673,7 @@ void UART_ProcessReceived(void)
  800291c:	d10c      	bne.n	8002938 <UART_ProcessReceived+0x60>
     	CMD_PumpRun2s();
  800291e:	f000 f897 	bl	8002a50 <CMD_PumpRun2s>
-		// Send Logs to UART on manual water
+
         char msg[128];
         snprintf(msg, sizeof(msg),
  8002922:	463b      	mov	r3, r7
@@ -5756,7 +5689,6 @@ void UART_ProcessReceived(void)
  8002936:	e05b      	b.n	80029f0 <UART_ProcessReceived+0x118>
     }
 
-    // LED
     else if (strcmp(uart_rx_buffer, "LED_PURPLE") == 0)   CMD_LED_Purple();
  8002938:	4936      	ldr	r1, [pc, #216]	@ (8002a14 <UART_ProcessReceived+0x13c>)
  800293a:	4831      	ldr	r0, [pc, #196]	@ (8002a00 <UART_ProcessReceived+0x128>)
@@ -5804,7 +5736,7 @@ void UART_ProcessReceived(void)
  8002998:	f000 f890 	bl	8002abc <CMD_LED_Dim>
  800299c:	e028      	b.n	80029f0 <UART_ProcessReceived+0x118>
 
-    // Sensors
+
     else if (strcmp(uart_rx_buffer, "REQ_MOIST") == 0)    CMD_Request_Moisture();
  800299e:	4922      	ldr	r1, [pc, #136]	@ (8002a28 <UART_ProcessReceived+0x150>)
  80029a0:	4817      	ldr	r0, [pc, #92]	@ (8002a00 <UART_ProcessReceived+0x128>)
@@ -5824,7 +5756,6 @@ void UART_ProcessReceived(void)
  80029c0:	f000 f8be 	bl	8002b40 <CMD_Request_Power>
  80029c4:	e014      	b.n	80029f0 <UART_ProcessReceived+0x118>
 
-    // Mode control from ESP32
     else if (strcmp(uart_rx_buffer, "MODE_AUTO") == 0) {
  80029c6:	491a      	ldr	r1, [pc, #104]	@ (8002a30 <UART_ProcessReceived+0x158>)
  80029c8:	480d      	ldr	r0, [pc, #52]	@ (8002a00 <UART_ProcessReceived+0x128>)
@@ -5876,16 +5807,15 @@ void UART_ProcessReceived(void)
 
 08002a38 <CMD_PumpOn>:
 
-/****************************************************
- * COMMANDS — Only calling your modules, NO new logic
- ****************************************************/
+
+
 void CMD_PumpOn(void)
 {
  8002a38:	b580      	push	{r7, lr}
  8002a3a:	af00      	add	r7, sp, #0
     Pump_On();
  8002a3c:	f7ff f866 	bl	8001b0c <Pump_On>
-    //UART_Send("{\"pump\":\"on\"}\n");
+
 }
  8002a40:	bf00      	nop
  8002a42:	bd80      	pop	{r7, pc}
@@ -5898,7 +5828,7 @@ void CMD_PumpOff(void)
  8002a46:	af00      	add	r7, sp, #0
     Pump_Off();
  8002a48:	f7ff f870 	bl	8001b2c <Pump_Off>
-    //UART_Send("{\"pump\":\"off\"}\n");
+
 }
  8002a4c:	bf00      	nop
  8002a4e:	bd80      	pop	{r7, pc}
@@ -5911,16 +5841,14 @@ void CMD_PumpRun2s(void)
  8002a52:	af00      	add	r7, sp, #0
     Pump_Run2s();
  8002a54:	f7ff f87a 	bl	8001b4c <Pump_Run2s>
-    //UART_Send("{\"pump\":\"2s\"}\n");
+
 }
  8002a58:	bf00      	nop
  8002a5a:	bd80      	pop	{r7, pc}
 
 08002a5c <CMD_LED_Purple>:
 
-/****************************************************
- * LED COMMANDS — Using EXACT existing logic
- ****************************************************/
+
 void CMD_LED_Purple(void)
 {
  8002a5c:	b580      	push	{r7, lr}
@@ -5928,7 +5856,7 @@ void CMD_LED_Purple(void)
     set_grow_purple(255);
  8002a60:	20ff      	movs	r0, #255	@ 0xff
  8002a62:	f7fe faad 	bl	8000fc0 <set_grow_purple>
-    //UART_Send("{\"led\":\"purple\"}\n");
+
 }
  8002a66:	bf00      	nop
  8002a68:	bd80      	pop	{r7, pc}
@@ -5941,7 +5869,6 @@ void CMD_LED_Off(void)
  8002a6c:	b580      	push	{r7, lr}
  8002a6e:	b082      	sub	sp, #8
  8002a70:	af00      	add	r7, sp, #0
-    // FULL WIPE
     for (uint16_t i = 0; i < WS_LED_COUNT; i++)
  8002a72:	2300      	movs	r3, #0
  8002a74:	80fb      	strh	r3, [r7, #6]
@@ -5964,7 +5891,7 @@ void CMD_LED_Off(void)
  8002a90:	4803      	ldr	r0, [pc, #12]	@ (8002aa0 <CMD_LED_Off+0x34>)
  8002a92:	f000 f9de 	bl	8002e52 <WS28XX_Update>
 
-    //UART_Send("{\"led\":\"off\"}\n");
+
 }
  8002a96:	bf00      	nop
  8002a98:	3708      	adds	r7, #8
@@ -5981,7 +5908,7 @@ void CMD_LED_FlashRed(void)
  8002aa6:	af00      	add	r7, sp, #0
     flash_error_led();
  8002aa8:	f7fe faba 	bl	8001020 <flash_error_led>
-    //UART_Send("{\"led\":\"flash_red\"}\n");
+
 }
  8002aac:	bf00      	nop
  8002aae:	bd80      	pop	{r7, pc}
@@ -5994,7 +5921,6 @@ void CMD_LED_Full(void)
  8002ab2:	af00      	add	r7, sp, #0
     grow_full_brightness();
  8002ab4:	f7fe fb1e 	bl	80010f4 <grow_full_brightness>
-    //UART_Send("{\"led\":\"full\"}\n");
 }
  8002ab8:	bf00      	nop
  8002aba:	bd80      	pop	{r7, pc}
@@ -6035,9 +5961,7 @@ void CMD_LED_Dim(void)
  8002aea:	4618      	mov	r0, r3
  8002aec:	f7fe fae2 	bl	80010b4 <grow_set_brightness>
 
-//    char msg[64];
-//    snprintf(msg, sizeof(msg), "{\"led_dim\":%d}\n", value);
-//    UART_Send(msg);
+
 }
  8002af0:	bf00      	nop
  8002af2:	3708      	adds	r7, #8
@@ -6048,9 +5972,7 @@ void CMD_LED_Dim(void)
 
 08002b00 <CMD_Request_Moisture>:
 
-/****************************************************
- * MOISTURE SENSOR
- ****************************************************/
+
 void CMD_Request_Moisture(void)
 {
  8002b00:	b5b0      	push	{r4, r5, r7, lr}
@@ -6060,9 +5982,8 @@ void CMD_Request_Moisture(void)
  8002b06:	f107 0384 	add.w	r3, r7, #132	@ 0x84
  8002b0a:	4618      	mov	r0, r3
  8002b0c:	f7fe ff36 	bl	800197c <Moisture_Read>
-//        m.raw_adc,
-//        m.avg_adc,
-//        (m.state == MOISTURE_WET ? "wet" : "dry"));
+
+
 
     char msg[128];
     snprintf(msg, sizeof(msg),
@@ -6090,9 +6011,7 @@ void CMD_Request_Moisture(void)
 
 08002b40 <CMD_Request_Power>:
 
-/****************************************************
- * INA219 POWER
- ****************************************************/
+
 void CMD_Request_Power(void)
 {
  8002b40:	b5b0      	push	{r4, r5, r7, lr}
@@ -6103,9 +6022,7 @@ void CMD_Request_Power(void)
  8002b46:	f107 0380 	add.w	r3, r7, #128	@ 0x80
  8002b4a:	4618      	mov	r0, r3
  8002b4c:	f7fe fb54 	bl	80011f8 <INA219_Read>
-//        d.bus_V,
-//        d.current_mA,
-//        d.power_mW);
+
 
     char msg[128];
     snprintf(msg, sizeof(msg),
@@ -6167,10 +6084,10 @@ void UART_SendMoisturePercent(float percent)
  8002bbc:	0800dc38 	.word	0x0800dc38
 
 08002bc0 <Debug_Print>:
-/**
- * @brief  Sends a string out USART2 (blocking).
- * @note   Uses HAL_MAX_DELAY so transmit will never timeout.
- */
+
+extern UART_HandleTypeDef huart2;
+
+
 void Debug_Print(const char *msg)
 {
  8002bc0:	b580      	push	{r7, lr}
@@ -6268,10 +6185,10 @@ void Debug_PrintInt(int32_t v)
  8002c5c:	0800dc60 	.word	0x0800dc60
 
 08002c60 <UQ_Init>:
+static volatile uint8_t tail = 0;
 
-// ===============================
-// INIT
-// ===============================
+
+
 void UQ_Init(void)
 {
  8002c60:	b480      	push	{r7}
@@ -6294,10 +6211,10 @@ void UQ_Init(void)
  8002c80:	20000e52 	.word	0x20000e52
 
 08002c84 <WS28XX_FillPWMBuffer>:
+#include <stdio.h>
+#include "uart_debug.h"
 
-// ---------------------------------------------------------------------------
-//  Fill PWM buffer with WS2812 GRB timing data
-// ---------------------------------------------------------------------------
+
 static void WS28XX_FillPWMBuffer(WS28XX_HandleTypeDef *h)
 {
  8002c84:	b480      	push	{r7}
@@ -6369,7 +6286,7 @@ static void WS28XX_FillPWMBuffer(WS28XX_HandleTypeDef *h)
  8002cf4:	f003 0301 	and.w	r3, r3, #1
  8002cf8:	2b00      	cmp	r3, #0
  8002cfa:	d009      	beq.n	8002d10 <WS28XX_FillPWMBuffer+0x8c>
-                    h->pwm[idx++] = WS_T1H;   // logic '1'
+                    h->pwm[idx++] = WS_T1H;
  8002cfc:	8bfb      	ldrh	r3, [r7, #30]
  8002cfe:	1c5a      	adds	r2, r3, #1
  8002d00:	83fa      	strh	r2, [r7, #30]
@@ -6381,7 +6298,7 @@ static void WS28XX_FillPWMBuffer(WS28XX_HandleTypeDef *h)
  8002d0c:	809a      	strh	r2, [r3, #4]
  8002d0e:	e008      	b.n	8002d22 <WS28XX_FillPWMBuffer+0x9e>
                 } else {
-                    h->pwm[idx++] = WS_T0H;   // logic '0'
+                    h->pwm[idx++] = WS_T0H;
  8002d10:	8bfb      	ldrh	r3, [r7, #30]
  8002d12:	1c5a      	adds	r2, r3, #1
  8002d14:	83fa      	strh	r2, [r7, #30]
@@ -6418,7 +6335,7 @@ static void WS28XX_FillPWMBuffer(WS28XX_HandleTypeDef *h)
         }
     }
 
-    // RESET pulse — all zeros
+
     for (uint16_t i = 0; i < WS2812_RESET_SLOTS; i++) {
  8002d4a:	2300      	movs	r3, #0
  8002d4c:	827b      	strh	r3, [r7, #18]
@@ -6456,7 +6373,7 @@ static void WS28XX_FillPWMBuffer(WS28XX_HandleTypeDef *h)
  8002d86:	4770      	bx	lr
 
 08002d88 <WS28XX_Init>:
-// ---------------------------------------------------------------------------
+
 void WS28XX_Init(WS28XX_HandleTypeDef *h,
                  TIM_HandleTypeDef *htim,
                  uint32_t tim_channel,
@@ -6555,7 +6472,6 @@ void WS28XX_SetPixel_RGB(WS28XX_HandleTypeDef *h,
  8002e0c:	429a      	cmp	r2, r3
  8002e0e:	d21a      	bcs.n	8002e46 <WS28XX_SetPixel_RGB+0x5a>
 
-    // WS2812 expects GRB order
     h->color[led * 3 + 0] = g;
  8002e10:	887a      	ldrh	r2, [r7, #2]
  8002e12:	4613      	mov	r3, r2
@@ -6596,9 +6512,7 @@ void WS28XX_SetPixel_RGB(WS28XX_HandleTypeDef *h,
 
 08002e52 <WS28XX_Update>:
 
-// ---------------------------------------------------------------------------
-//  Update LED Strip (DMA Start)
-// ---------------------------------------------------------------------------
+
 void WS28XX_Update(WS28XX_HandleTypeDef *h)
 {
  8002e52:	b580      	push	{r7, lr}
@@ -6659,9 +6573,7 @@ void WS28XX_Update(WS28XX_HandleTypeDef *h)
 
 08002e9e <WS28XX_DMA_Complete_Callback>:
 
-// ---------------------------------------------------------------------------
-//  DMA Complete Callback
-// ---------------------------------------------------------------------------
+
 void WS28XX_DMA_Complete_Callback(WS28XX_HandleTypeDef *h)
 {
  8002e9e:	b580      	push	{r7, lr}

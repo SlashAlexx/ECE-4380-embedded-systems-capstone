@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// ----- High-level modes -----
+
 typedef enum {
     MODE_AUTO = 0,
     MODE_MANUAL = 1
@@ -20,7 +20,7 @@ typedef enum {
     FAIL_OVERCURRENT = 1
 } FailState_t;
 
-// ----- Global state accessors -----
+
 void State_Init(void);
 
 void State_SetMode(SystemMode_t mode);
@@ -29,14 +29,14 @@ SystemMode_t State_GetMode(void);
 SoilState_t State_GetSoilState(void);
 FailState_t State_GetFailState(void);
 
-// These are called from RTOS tasks:
+
 void State_UpdateMoisture(void);
 void State_UpdatePower(void);
-void State_StateMachineTick(void);   // main logic (auto water, LEDs, etc.)
+void State_StateMachineTick(void);
 
-// NEW moisture info getters
+
 int State_GetRawMoisture(void);
 int State_GetWetCalibration(void);
 int State_GetDryCalibration(void);
 
-#endif // SYSTEM_STATE_H
+#endif

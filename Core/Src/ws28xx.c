@@ -1,10 +1,8 @@
 #include "ws28xx.h"
-#include <stdio.h>          // <-- REQUIRED for sprintf
-#include "uart_debug.h"     // <-- REQUIRED for Debug_Print()
+#include <stdio.h>
+#include "uart_debug.h"
 
-// ---------------------------------------------------------------------------
-//  Fill PWM buffer with WS2812 GRB timing data
-// ---------------------------------------------------------------------------
+
 static void WS28XX_FillPWMBuffer(WS28XX_HandleTypeDef *h)
 {
     uint16_t idx = 0;
@@ -19,23 +17,21 @@ static void WS28XX_FillPWMBuffer(WS28XX_HandleTypeDef *h)
         for (int c = 0; c < 3; c++) {
             for (int bit = 7; bit >= 0; bit--) {
                 if (grb[c] & (1 << bit)) {
-                    h->pwm[idx++] = WS_T1H;   // logic '1'
+                    h->pwm[idx++] = WS_T1H;
                 } else {
-                    h->pwm[idx++] = WS_T0H;   // logic '0'
+                    h->pwm[idx++] = WS_T0H;
                 }
             }
         }
     }
 
-    // RESET pulse — all zeros
+
     for (uint16_t i = 0; i < WS2812_RESET_SLOTS; i++) {
         h->pwm[i + h->num_leds * WS2812_BITS_PER_LED] = 0;
     }
 }
 
-// ---------------------------------------------------------------------------
-//  Init
-// ---------------------------------------------------------------------------
+
 void WS28XX_Init(WS28XX_HandleTypeDef *h,
                  TIM_HandleTypeDef *htim,
                  uint32_t tim_channel,
@@ -57,9 +53,7 @@ void WS28XX_Init(WS28XX_HandleTypeDef *h,
     WS28XX_FillPWMBuffer(h);
 }
 
-// ---------------------------------------------------------------------------
-//  Set Pixel
-// ---------------------------------------------------------------------------
+
 void WS28XX_SetPixel_RGB(WS28XX_HandleTypeDef *h,
                          uint16_t led,
                          uint8_t r,
@@ -68,15 +62,12 @@ void WS28XX_SetPixel_RGB(WS28XX_HandleTypeDef *h,
 {
     if (led >= h->num_leds) return;
 
-    // WS2812 expects GRB order
     h->color[led * 3 + 0] = g;
     h->color[led * 3 + 1] = r;
     h->color[led * 3 + 2] = b;
 }
 
-// ---------------------------------------------------------------------------
-//  Update LED Strip (DMA Start)
-// ---------------------------------------------------------------------------
+
 void WS28XX_Update(WS28XX_HandleTypeDef *h)
 {
     if (h->busy) return;
@@ -97,9 +88,7 @@ void WS28XX_Update(WS28XX_HandleTypeDef *h)
     );
 }
 
-// ---------------------------------------------------------------------------
-//  DMA Complete Callback
-// ---------------------------------------------------------------------------
+
 void WS28XX_DMA_Complete_Callback(WS28XX_HandleTypeDef *h)
 {
     HAL_TIM_PWM_Stop_DMA(h->htim, h->tim_channel);

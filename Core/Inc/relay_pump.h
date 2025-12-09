@@ -4,7 +4,7 @@
 #include "stm32l4xx_hal.h"
 #include <stdint.h>
 #include <stdbool.h>
-// Active LOW relay
+
 #define PUMP_RELAY_GPIO_PORT   GPIOA
 #define PUMP_RELAY_PIN         GPIO_PIN_8
 

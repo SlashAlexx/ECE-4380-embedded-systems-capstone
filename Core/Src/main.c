@@ -68,7 +68,6 @@ UART_HandleTypeDef huart2;
 char msg[64];
 /* USER CODE END PV */
 
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
@@ -99,21 +98,18 @@ int main(void)
 
   /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
 
-  /* Configure the system clock */
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_ADC1_Init();
@@ -124,14 +120,14 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(GPIOA, LED_STATUS_Pin|RELAY_OUTPUT_Pin, GPIO_PIN_RESET);
 
-  // ========== MODULE INITIALIZATION ==========
+
       Debug_Print("System Boot...\r\n");
 
       MoistureSensor_Init();
       Pump_Init();
 
-      // ----- GROW LED TEST SEQUENCE -----
-      init_grow_leds();                // 1) init + show blue
+
+      init_grow_leds();
 
       INA219_Init();
 
@@ -140,40 +136,27 @@ int main(void)
 
   /* USER CODE END 2 */
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-      /* USER CODE BEGIN WHILE */
-      // ----- STATE + UART + RTOS SETUP -----
-      State_Init();        // sets AUTO mode, WET, no FAIL, LED purple
+      State_Init();
 
-      UART_Init();         // starts UART1 RX interrupt for command parsing
+      UART_Init();
 
       RTOS_Init();
       UQ_Init();
 
 
-      // Add tasks: (function, initialState, period_ms)
-      // Period values assume your RTOS template uses ms units.
-      RTOS_AddTask(Task_UART,      1, 500);   // every 50 ms
-      RTOS_AddTask(Task_Moisture,  1, 5000);   // every 5000 ms
-      RTOS_AddTask(Task_INA219,    1, 5000);   // every 5000 ms
-      RTOS_AddTask(Task_Pump,      1, 5000);   // every 200 ms
-      RTOS_AddTask(Task_LED,       1, 10000);   // every 200 ms
-      RTOS_AddTask(Task_Heartbeat, 1, 2000);  // every 2 s (debug)
+      RTOS_AddTask(Task_UART,      1, 500);
+      RTOS_AddTask(Task_Moisture,  1, 5000);
+      RTOS_AddTask(Task_INA219,    1, 5000);
+      RTOS_AddTask(Task_Pump,      1, 5000);
+      RTOS_AddTask(Task_LED,       1, 10000);
+      RTOS_AddTask(Task_Heartbeat, 1, 2000);
 
       Debug_Print("RTOS: Tasks registered\r\n");
 
 
-
-
-
-      // Start scheduler (never returns)
-
-
-
       while (1)
       {
-    	  RTOS_Run();// small CPU break
+    	  RTOS_Run();
 
       }
 
@@ -186,25 +169,17 @@ int main(void)
   /* USER CODE END 3 */
 
 
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Configure the main internal regulator output voltage
-  */
+
   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
   {
     Error_Handler();
   }
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -220,8 +195,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
@@ -545,13 +518,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     if (GPIO_Pin == B1_Pin)
     {
-        // First edge = button pressed
+
         if (!button_waiting_for_release)
         {
             button_waiting_for_release = true;
             button_down_time = HAL_GetTick();
         }
-        // Second edge = button released
+
         else
         {
             uint32_t held = HAL_GetTick() - button_down_time;

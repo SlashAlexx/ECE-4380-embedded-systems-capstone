@@ -5,14 +5,10 @@
 #include <stdint.h>
 #include <stddef.h>
 
-/**
- * @brief Send a string without newline over USART2.
- */
+
 void Debug_Print(const char *msg);
 
-/**
- * @brief Send a string followed by CR+LF over USART2.
- */
+
 void Debug_Println(const char *msg);
 
 
@@ -21,4 +17,4 @@ void Debug_PrintFloat(const char *label, float value);
 
 void Debug_PrintInt(int32_t v);
 
-#endif // UART_DEBUG_H
+#endif

@@ -2,13 +2,9 @@
 #include <uart_debug.h>
 #include <stdio.h>
 
-// IMPORTANT: This handle is created in usart.c by CubeMX
 extern UART_HandleTypeDef huart2;
 
-/**
- * @brief  Sends a string out USART2 (blocking).
- * @note   Uses HAL_MAX_DELAY so transmit will never timeout.
- */
+
 void Debug_Print(const char *msg)
 {
     if (msg == NULL)
@@ -20,9 +16,7 @@ void Debug_Print(const char *msg)
                       HAL_MAX_DELAY);
 }
 
-/**
- * @brief  Sends a string followed by CR LF.
- */
+
 void Debug_Println(const char *msg)
 {
     Debug_Print(msg);

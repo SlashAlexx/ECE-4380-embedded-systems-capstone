@@ -3,10 +3,9 @@
 
 extern I2C_HandleTypeDef hi2c1;
 
-// Calibration values for INA219 (based on 0.1Ω shunt)
 static uint16_t calibrationValue = 4096;
 
-// Cached reading
+
 static INA219_Data_t last_read;
 
 static void INA219_WriteRegister(uint8_t reg, uint16_t value)
@@ -30,12 +29,11 @@ void INA219_Init(void)
 {
     Debug_Print("INA219: Initializing...\r\n");
 
-    // Set calibration register
+
     INA219_WriteRegister(INA219_CALIB_REG, calibrationValue);
 
-    // Config: Shunt & bus, continuous mode
     INA219_WriteRegister(INA219_CONFIG_REG,
-        0x019F);  // 32V, 2A, 12-bit samples
+        0x019F);
 
     Debug_Print("INA219: Ready.\r\n");
 }
@@ -54,9 +52,7 @@ void INA219_Read(INA219_Data_t *out)
 
     last_read = *out;
 
-    // ==========================
-    // OVERCURRENT CHECK
-    // ==========================
+
     if (out->current_mA >= INA219_MAX_CURRENT_MA)
     {
         GrowLight_CurrentLimit_Callback(out->current_mA);

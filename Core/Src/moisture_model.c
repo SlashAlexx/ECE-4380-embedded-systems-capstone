@@ -22,8 +22,7 @@ float MoistureModel_GetPercent(void)
 
     int sum = 0;
     for (int i = 0; i < filled; i++)
-        sum += buffer[i];     // sum of WET readings
+        sum += buffer[i];
 
-    // percent = (#wet / #samples) * 100
     return (sum * 100.0f) / filled;
 }

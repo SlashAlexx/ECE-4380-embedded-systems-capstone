@@ -7211,41 +7211,41 @@ LOAD S:/Program Files/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.
  .debug_macro   0x0002c13f      0x227 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.o
  .debug_macro   0x0002c366      0x1fc ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.o
 
-.debug_line     0x00000000    0x22779
- .debug_line    0x00000000      0xb86 ./Core/Src/grow_led.o
- .debug_line    0x00000b86      0x8a1 ./Core/Src/ina219.o
- .debug_line    0x00001427      0xe18 ./Core/Src/main.o
- .debug_line    0x0000223f      0x494 ./Core/Src/moisture_model.o
- .debug_line    0x000026d3      0xbb4 ./Core/Src/moisture_sensor.o
- .debug_line    0x00003287      0x845 ./Core/Src/relay_pump.o
- .debug_line    0x00003acc      0x884 ./Core/Src/rtos.o
- .debug_line    0x00004350      0xb31 ./Core/Src/rtos_tasks.o
- .debug_line    0x00004e81      0x9cb ./Core/Src/stm32l4xx_hal_msp.o
- .debug_line    0x0000584c      0x93c ./Core/Src/stm32l4xx_it.o
- .debug_line    0x00006188      0x99f ./Core/Src/syscalls.o
- .debug_line    0x00006b27      0x67b ./Core/Src/sysmem.o
- .debug_line    0x000071a2      0xc32 ./Core/Src/system_state.o
- .debug_line    0x00007dd4      0x859 ./Core/Src/system_stm32l4xx.o
- .debug_line    0x0000862d      0xd58 ./Core/Src/uart_comms.o
- .debug_line    0x00009385      0xa84 ./Core/Src/uart_debug.o
- .debug_line    0x00009e09      0x6fa ./Core/Src/uart_queue.o
- .debug_line    0x0000a503      0xb7b ./Core/Src/ws28xx.o
- .debug_line    0x0000b07e       0x7a ./Core/Startup/startup_stm32l476rgtx.o
- .debug_line    0x0000b0f8      0xbc2 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.o
- .debug_line    0x0000bcba     0x1fab ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc.o
- .debug_line    0x0000dc65     0x19a2 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc_ex.o
- .debug_line    0x0000f607      0xd5c ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.o
- .debug_line    0x00010363      0xd9b ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.o
- .debug_line    0x000110fe      0xc15 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.o
- .debug_line    0x00011d13     0x37c2 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.o
- .debug_line    0x000154d5      0x921 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.o
- .debug_line    0x00015df6      0xda3 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.o
- .debug_line    0x00016b99     0x1116 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.o
- .debug_line    0x00017caf     0x15e3 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.o
- .debug_line    0x00019292     0x3ead ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.o
- .debug_line    0x0001d13f     0x1bfe ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.o
- .debug_line    0x0001ed3d     0x2de4 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.o
- .debug_line    0x00021b21      0xc58 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.o
+.debug_line     0x00000000    0x22768
+ .debug_line    0x00000000      0xb85 ./Core/Src/grow_led.o
+ .debug_line    0x00000b85      0x8a0 ./Core/Src/ina219.o
+ .debug_line    0x00001425      0xe12 ./Core/Src/main.o
+ .debug_line    0x00002237      0x494 ./Core/Src/moisture_model.o
+ .debug_line    0x000026cb      0xbb4 ./Core/Src/moisture_sensor.o
+ .debug_line    0x0000327f      0x845 ./Core/Src/relay_pump.o
+ .debug_line    0x00003ac4      0x884 ./Core/Src/rtos.o
+ .debug_line    0x00004348      0xb30 ./Core/Src/rtos_tasks.o
+ .debug_line    0x00004e78      0x9cb ./Core/Src/stm32l4xx_hal_msp.o
+ .debug_line    0x00005843      0x93c ./Core/Src/stm32l4xx_it.o
+ .debug_line    0x0000617f      0x99f ./Core/Src/syscalls.o
+ .debug_line    0x00006b1e      0x67b ./Core/Src/sysmem.o
+ .debug_line    0x00007199      0xc32 ./Core/Src/system_state.o
+ .debug_line    0x00007dcb      0x859 ./Core/Src/system_stm32l4xx.o
+ .debug_line    0x00008624      0xd53 ./Core/Src/uart_comms.o
+ .debug_line    0x00009377      0xa82 ./Core/Src/uart_debug.o
+ .debug_line    0x00009df9      0x6fa ./Core/Src/uart_queue.o
+ .debug_line    0x0000a4f3      0xb7a ./Core/Src/ws28xx.o
+ .debug_line    0x0000b06d       0x7a ./Core/Startup/startup_stm32l476rgtx.o
+ .debug_line    0x0000b0e7      0xbc2 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.o
+ .debug_line    0x0000bca9     0x1fab ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc.o
+ .debug_line    0x0000dc54     0x19a2 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc_ex.o
+ .debug_line    0x0000f5f6      0xd5c ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.o
+ .debug_line    0x00010352      0xd9b ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.o
+ .debug_line    0x000110ed      0xc15 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.o
+ .debug_line    0x00011d02     0x37c2 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.o
+ .debug_line    0x000154c4      0x921 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.o
+ .debug_line    0x00015de5      0xda3 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.o
+ .debug_line    0x00016b88     0x1116 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.o
+ .debug_line    0x00017c9e     0x15e3 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.o
+ .debug_line    0x00019281     0x3ead ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.o
+ .debug_line    0x0001d12e     0x1bfe ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.o
+ .debug_line    0x0001ed2c     0x2de4 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.o
+ .debug_line    0x00021b10      0xc58 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.o
 
 .debug_str      0x00000000   0x10b773
  .debug_str     0x00000000   0x10b773 ./Core/Src/grow_led.o

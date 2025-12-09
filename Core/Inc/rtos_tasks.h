@@ -3,7 +3,7 @@
 
 #include "system_state.h"
 
-// All RTOS tasks MUST be:  void Task(void)
+
 
 void Task_UART(void);
 void Task_Moisture(void);
@@ -12,4 +12,4 @@ void Task_Pump(void);
 void Task_LED(void);
 void Task_Heartbeat(void);
 
-#endif // RTOS_TASKS_H
+#endif

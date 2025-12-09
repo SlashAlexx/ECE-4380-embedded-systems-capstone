@@ -16,26 +16,26 @@ void Pump_Init(void)
 
     HAL_GPIO_Init(PUMP_RELAY_GPIO_PORT, &GPIO_InitStruct);
 
-    Pump_Off(); // safe state
+    Pump_Off();
 
     Debug_Print("PUMP: Initialized (active LOW)\r\n");
 }
 
-// Relay ACTIVE LOW → ON = 0
+
 void Pump_On(void)
 {
     HAL_GPIO_WritePin(PUMP_RELAY_GPIO_PORT, PUMP_RELAY_PIN, GPIO_PIN_RESET);
     Debug_Print("PUMP: ON\r\n");
 }
 
-// Relay ACTIVE LOW → OFF = 1
+
 void Pump_Off(void)
 {
     HAL_GPIO_WritePin(PUMP_RELAY_GPIO_PORT, PUMP_RELAY_PIN, GPIO_PIN_SET);
     Debug_Print("PUMP: OFF\r\n");
 }
 
-// Run pump for exactly 2 seconds
+
 void Pump_Run2s(void)
 {
     Debug_Print("PUMP: Running for 2 seconds...\r\n");
@@ -46,5 +46,4 @@ void Pump_Run2s(void)
 
     Debug_Print("PUMP: 2-second cycle complete\r\n");
 
-    // Moisture model update (2 seconds of pumping)
 }

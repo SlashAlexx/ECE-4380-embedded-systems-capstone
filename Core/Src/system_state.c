@@ -7,25 +7,21 @@
 #include "uart_debug.h"
 #include <stdio.h>
 
-/************************************************************
- * GLOBAL STATE VARIABLES
- ************************************************************/
+
 SystemMode_t     g_systemMode     = MODE_AUTO;
 FailState_t      g_failState      = FAIL_NONE;
 MoistureState_t  g_moistState     = MOISTURE_DRY;
-uint32_t         g_pumpCooldownMs = 0;   // reserved for future
+uint32_t         g_pumpCooldownMs = 0;
 
-/************************************************************
- * INITIALIZATION STATE
- ************************************************************/
+
 void State_Init(void)
 {
     Debug_Print("STATE: Init...\r\n");
 
-    // LED default
+
     set_grow_purple(255);
 
-    // Initial moisture read
+
     MoistureReading_t m = Moisture_Read();
     g_moistState = m.state;
 
@@ -38,17 +34,12 @@ void State_Init(void)
     g_systemMode = MODE_AUTO;
 }
 
-/************************************************************
- * AUTO MODE — decision logic only
- ************************************************************/
+
 void State_Auto(void)
 {
     Debug_Print("AUTO: Running logic...\r\n");
 
-//    if (g_failState != FAIL_NONE)
-//    {
-//        set_grow_purple(255);
-//    }
+
 
     if (g_failState == FAIL_NONE)
     {
@@ -57,7 +48,7 @@ void State_Auto(void)
             Debug_Print("AUTO: Soil dry → pump for 2s\r\n");
             Pump_Run2s();
 
-			// Send Logs to UART on auto water
+
             char msg[128];
             snprintf(msg, sizeof(msg),
             		"{\"AutoWateringLog\": true}\n");
@@ -74,17 +65,13 @@ void State_Auto(void)
     }
 }
 
-/************************************************************
- * MANUAL MODE
- ************************************************************/
+
 void State_Manual(void)
 {
     Debug_Print("MODE: Manual active (ESP32 controls)\r\n");
 }
 
-/************************************************************
- * UPDATE MOISTURE
- ************************************************************/
+
 void State_UpdateMoisture(void)
 {
     MoistureReading_t m = Moisture_Read();
@@ -102,9 +89,7 @@ void State_UpdateMoisture(void)
     UART_Send(msg);
 }
 
-/************************************************************
- * UPDATE POWER + FAIL DETECTION
- ************************************************************/
+
 void State_UpdatePower(void)
 {
     INA219_Data_t d;
@@ -139,9 +124,7 @@ void State_UpdatePower(void)
     UART_Send(msg);
 }
 
-/************************************************************
- * STATE MACHINE – PUBLIC ACCESS
- ************************************************************/
+
 SystemMode_t State_GetMode(void)
 {
     return g_systemMode;
@@ -171,9 +154,7 @@ FailState_t State_GetFailState(void)
 }
 
 
-/************************************************************
- * STATE MACHINE TICK – called from RTOS Task_Pump
- ************************************************************/
+
 void State_StateMachineTick(void)
 {
     switch (g_systemMode)

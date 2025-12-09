@@ -5,17 +5,14 @@
 
 extern ADC_HandleTypeDef hadc1;
 
-// These should be adjusted based on your observed values
 static uint32_t wet_adc  = 2861;
 static uint32_t dry_adc  = 2871;
 
-// ---------- Initialization ----------
 void MoistureSensor_Init(void)
 {
     Debug_Print("Moisture Sensor Initialized\r\n");
 }
 
-// ---------- Read + Oversample ----------
 MoistureReading_t Moisture_Read(void)
 {
     MoistureReading_t r;
@@ -34,7 +31,6 @@ MoistureReading_t Moisture_Read(void)
     r.raw_adc = r.avg_adc;
     r.timestamp_ms = HAL_GetTick();
 
-    // ---------- Moisture % Calculation ----------
     float range = (float)(dry_adc - wet_adc);
     if (range < 1) range = 1;
 
@@ -45,14 +41,12 @@ MoistureReading_t Moisture_Read(void)
 
     r.percent = norm * 100.0f;
 
-    // ---------- Wet/Dry Classification ----------
     uint32_t mid = (wet_adc + dry_adc) / 2;
     r.state = (r.avg_adc <= mid) ? MOISTURE_WET : MOISTURE_DRY;
 
     return r;
 }
 
-// ---------- Print Debug ----------
 void Moisture_Print(void)
 {
     char msg[128];
@@ -67,9 +61,6 @@ void Moisture_Print(void)
 
     Debug_Print(msg);
 }
-// ======================
-// ACCESSOR FUNCTIONS
-// ======================
 
 static MoistureReading_t lastReading;
 

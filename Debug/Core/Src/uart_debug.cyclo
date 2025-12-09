@@ -1,4 +1,4 @@
-../Core/Src/uart_debug.c:12:6:Debug_Print	2
-../Core/Src/uart_debug.c:26:6:Debug_Println	1
-../Core/Src/uart_debug.c:32:6:Debug_PrintFloat	1
-../Core/Src/uart_debug.c:38:6:Debug_PrintInt	1
+../Core/Src/uart_debug.c:8:6:Debug_Print	2
+../Core/Src/uart_debug.c:20:6:Debug_Println	1
+../Core/Src/uart_debug.c:26:6:Debug_PrintFloat	1
+../Core/Src/uart_debug.c:32:6:Debug_PrintInt	1
