@@ -1,0 +1,6 @@
+../Core/Src/rtos_tasks.c:10:6:Task_UART	8	static
+../Core/Src/rtos_tasks.c:16:6:Task_Moisture	32	static
+../Core/Src/rtos_tasks.c:49:6:Task_INA219	8	static
+../Core/Src/rtos_tasks.c:55:6:Task_Pump	8	static
+../Core/Src/rtos_tasks.c:65:6:Task_LED	4	static
+../Core/Src/rtos_tasks.c:71:6:Task_Heartbeat	8	static

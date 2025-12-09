@@ -1,0 +1,9 @@
+../Core/Src/grow_led.c:13:6:SetPixel_BGR	1
+../Core/Src/grow_led.c:19:6:init_grow_leds	1
+../Core/Src/grow_led.c:32:6:update_grow_leds	2
+../Core/Src/grow_led.c:45:6:set_grow_purple	2
+../Core/Src/grow_led.c:62:6:flash_error_led	4
+../Core/Src/grow_led.c:87:6:grow_set_brightness	1
+../Core/Src/grow_led.c:93:6:grow_dim_to_safe	1
+../Core/Src/grow_led.c:102:6:grow_full_brightness	1
+../Core/Src/grow_led.c:109:6:GrowLight_CurrentLimit_Callback	1

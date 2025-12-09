@@ -1,0 +1,4 @@
+../Core/Src/uart_debug.c:8:6:Debug_Print	16	static
+../Core/Src/uart_debug.c:20:6:Debug_Println	16	static
+../Core/Src/uart_debug.c:26:6:Debug_PrintFloat	88	static
+../Core/Src/uart_debug.c:32:6:Debug_PrintInt	32	static

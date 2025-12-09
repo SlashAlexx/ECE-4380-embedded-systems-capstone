@@ -1,0 +1,4 @@
+../Core/Src/rtos.c:12:6:RTOS_Init	2
+../Core/Src/rtos.c:25:6:RTOS_AddTask	5
+../Core/Src/rtos.c:44:6:RTOS_Tick	1
+../Core/Src/rtos.c:50:6:RTOS_Run	5

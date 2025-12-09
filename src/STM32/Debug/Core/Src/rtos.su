@@ -1,0 +1,4 @@
+../Core/Src/rtos.c:12:6:RTOS_Init	16	static
+../Core/Src/rtos.c:25:6:RTOS_AddTask	32	static
+../Core/Src/rtos.c:44:6:RTOS_Tick	4	static
+../Core/Src/rtos.c:50:6:RTOS_Run	24	static,ignoring_inline_asm
