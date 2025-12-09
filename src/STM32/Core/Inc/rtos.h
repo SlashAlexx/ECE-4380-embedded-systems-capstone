@@ -25,7 +25,7 @@ typedef struct
 
 
 void RTOS_Init(void);
-void RTOS_AddTask(RTOS_TaskFunc_t func, uint8_t startActive, uint32_t period_ms);
+void RTOS_AddTask(RTOS_TaskFunc_t func, uint32_t period_ms);
 void RTOS_Run(void);
 void RTOS_Tick(void);
 

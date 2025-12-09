@@ -39,8 +39,6 @@ void State_Auto(void)
 {
     Debug_Print("AUTO: Running logic...\r\n");
 
-
-
     if (g_failState == FAIL_NONE)
     {
         if (g_moistState == MOISTURE_DRY)
@@ -84,8 +82,7 @@ void State_UpdateMoisture(void)
     Debug_Print(dbg);
 
     char msg[128];
-    snprintf(msg, sizeof(msg),
-		"{\"MoistureLevel\": %.2f}\n", m);
+    snprintf(msg, sizeof(msg), "{\"MoistureLevel\": %.2f}\n", m);
     UART_Send(msg);
 }
 
@@ -119,8 +116,7 @@ void State_UpdatePower(void)
     }
 
     char msg[128];
-    snprintf(msg, sizeof(msg),
-		"{\"GrowLEDPower\": %.2f}\n", d.power_mW);
+    snprintf(msg, sizeof(msg), "{\"GrowLEDPower\": %.2f}\n", d.power_mW);
     UART_Send(msg);
 }
 

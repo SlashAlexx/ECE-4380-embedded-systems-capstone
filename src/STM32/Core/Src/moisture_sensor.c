@@ -34,6 +34,7 @@ MoistureReading_t Moisture_Read(void)
     float range = (float)(dry_adc - wet_adc);
     if (range < 1) range = 1;
 
+    // Normalized to calculate percentage values, if out of bounds, clip
     float norm = 1.0f - ((float)(r.avg_adc - wet_adc) / range);
 
     if (norm < 0) norm = 0;
@@ -41,12 +42,14 @@ MoistureReading_t Moisture_Read(void)
 
     r.percent = norm * 100.0f;
 
+    // Classified into wet or dry (does not use moisture model for percentage)
     uint32_t mid = (wet_adc + dry_adc) / 2;
     r.state = (r.avg_adc <= mid) ? MOISTURE_WET : MOISTURE_DRY;
 
     return r;
 }
 
+// Print to debug console for moisture metrics
 void Moisture_Print(void)
 {
     char msg[128];
@@ -65,6 +68,7 @@ void Moisture_Print(void)
 static MoistureReading_t lastReading;
 
 
+// Basic helpers for moisture related functionality
 uint32_t Moisture_GetRawADC(void)
 {
     return lastReading.raw_adc;

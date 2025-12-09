@@ -64,7 +64,7 @@ void Task_Pump(void)
 
 void Task_LED(void)
 {
-
+    // NOP
 }
 
 

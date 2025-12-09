@@ -14,7 +14,6 @@ void RTOS_Init(void)
     for (int i = 0; i < RTOS_MAX_TASKS; i++)
     {
         g_tasks[i].func       = NULL;
-        g_tasks[i].active     = 0;
         g_tasks[i].period_ms  = 0;
         g_tasks[i].lastRun_ms = 0;
     }
@@ -22,7 +21,7 @@ void RTOS_Init(void)
 }
 
 
-void RTOS_AddTask(RTOS_TaskFunc_t func, uint8_t startActive, uint32_t period_ms)
+void RTOS_AddTask(RTOS_TaskFunc_t func, uint32_t period_ms)
 {
     if (func == NULL || period_ms == 0)
         return;
@@ -31,8 +30,8 @@ void RTOS_AddTask(RTOS_TaskFunc_t func, uint8_t startActive, uint32_t period_ms)
     {
         if (g_tasks[i].func == NULL)
         {
-            g_tasks[i].func       = func;
-            g_tasks[i].active     = startActive ? 1 : 0;
+            g_tasks[i].func       = func; // Reference to task implementation in system_state.c
+            g_tasks[i].active     = 1; // Always active
             g_tasks[i].period_ms  = period_ms;
             g_tasks[i].lastRun_ms = 0;
             break;
@@ -47,6 +46,7 @@ void RTOS_Tick(void)
 }
 
 
+// Main RTOS implementation, loops through all tasks, continuously checking against elapsed time
 void RTOS_Run(void)
 {
     uint32_t now = g_rtosTickMs;

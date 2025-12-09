@@ -16,7 +16,7 @@ void SetPixel_BGR(uint16_t index, uint8_t r, uint8_t g, uint8_t b)
 }
 
 
-void init_grow_leds(void)
+void init_grow_leds()
 {
     WS28XX_Init(&ws_led, &htim3, TIM_CHANNEL_3, WS_LED_COUNT);
 
@@ -41,7 +41,7 @@ void update_grow_leds(uint8_t brightness)
     WS28XX_Update(&ws_led);
 }
 
-
+// Sets to purple with a defined intensity/brightness
 void set_grow_purple(uint8_t intensity)
 {
     for (uint16_t i = 0; i < WS_LED_COUNT; i++)
@@ -56,10 +56,8 @@ void set_grow_purple(uint8_t intensity)
     Debug_Print(dbg);
 }
 
-/****************************************************
- * Flash RED for errors
- ****************************************************/
-void flash_error_led(void)
+// Flashes LED's red 5 times to signify overcurrent or other error
+void flash_error_led()
 {
     Debug_Print("GROW: flash_error_led START\r\n");
 
@@ -81,6 +79,7 @@ void flash_error_led(void)
     }
 
     Debug_Print("GROW: flash_error_led DONE\r\n");
+    set_grow_purple(255);
 }
 
 
@@ -90,7 +89,7 @@ void grow_set_brightness(uint8_t brightness)
 }
 
 
-void grow_dim_to_safe(void)
+void grow_dim_to_safe()
 {
     uint8_t safe_level = 120;
     update_grow_leds(safe_level);
@@ -99,7 +98,7 @@ void grow_dim_to_safe(void)
 }
 
 
-void grow_full_brightness(void)
+void grow_full_brightness()
 {
     update_grow_leds(255);
     Debug_Print("GROW: full brightness (255)\r\n");

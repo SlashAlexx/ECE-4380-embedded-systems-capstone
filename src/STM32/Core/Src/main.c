@@ -137,27 +137,24 @@ int main(void)
   /* USER CODE END 2 */
 
       State_Init();
-
       UART_Init();
-
       RTOS_Init();
       UQ_Init();
 
-
-      RTOS_AddTask(Task_UART,      1, 500);
-      RTOS_AddTask(Task_Moisture,  1, 5000);
-      RTOS_AddTask(Task_INA219,    1, 5000);
-      RTOS_AddTask(Task_Pump,      1, 5000);
-      RTOS_AddTask(Task_LED,       1, 10000);
-      RTOS_AddTask(Task_Heartbeat, 1, 2000);
+      // Add tasks based on period
+      RTOS_AddTask(Task_UART,      500);
+      RTOS_AddTask(Task_Moisture,  5000);
+      RTOS_AddTask(Task_INA219,    5000);
+      RTOS_AddTask(Task_Pump,      5000);
+      RTOS_AddTask(Task_LED,       10000);
+      RTOS_AddTask(Task_Heartbeat, 2000);
 
       Debug_Print("RTOS: Tasks registered\r\n");
-
-
+      
+      // Continuously loop through array of tasks
       while (1)
       {
     	  RTOS_Run();
-
       }
 
 }

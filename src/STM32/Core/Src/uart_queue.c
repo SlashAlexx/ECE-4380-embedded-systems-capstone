@@ -3,18 +3,16 @@
 
 #define UART_QUEUE_SIZE 20
 
+// Queue to store moisture and power values between tasks
 static UART_Message_t queue[UART_QUEUE_SIZE];
 static volatile uint8_t head = 0;
 static volatile uint8_t tail = 0;
-
-
 
 void UQ_Init(void)
 {
     head = 0;
     tail = 0;
 }
-
 
 bool UQ_Push(UART_Message_t msg)
 {
@@ -27,7 +25,6 @@ bool UQ_Push(UART_Message_t msg)
     head = next;
     return true;
 }
-
 
 bool UQ_Pop(UART_Message_t *out)
 {

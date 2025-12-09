@@ -10,14 +10,14 @@
 extern WS28XX_HandleTypeDef ws_led;
 
 
-void init_grow_leds(void);
+void init_grow_leds();
 void update_grow_leds(uint8_t brightness);
-void flash_error_led(void);
+void flash_error_led();
 
 
 void grow_set_brightness(uint8_t brightness);
-void grow_dim_to_safe(void);
-void grow_full_brightness(void);
+void grow_dim_to_safe();
+void grow_full_brightness();
 
 
 

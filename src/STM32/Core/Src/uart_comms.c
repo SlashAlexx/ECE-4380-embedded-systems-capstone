@@ -37,6 +37,7 @@ void UART_Send(const char *msg)
 }
 
 
+// Interrupt callback for any received UART message
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart->Instance == USART1)
@@ -54,7 +55,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
 }
 
-
+// Classify/parse and process any recieved UART message
 void UART_ProcessReceived(void)
 {
     if (uart_rx_buffer[0] == '\0')
@@ -94,30 +95,25 @@ void UART_ProcessReceived(void)
 }
 
 
-
 void CMD_PumpOn(void)
 {
     Pump_On();
-
 }
 
 void CMD_PumpOff(void)
 {
     Pump_Off();
-
 }
 
 void CMD_PumpRun2s(void)
 {
     Pump_Run2s();
-
 }
 
 
 void CMD_LED_Purple(void)
 {
     set_grow_purple(255);
-
 }
 
 void CMD_LED_Off(void)
@@ -126,14 +122,11 @@ void CMD_LED_Off(void)
         SetPixel_BGR(i, 0, 0, 0);
 
     WS28XX_Update(&ws_led);
-
-
 }
 
 void CMD_LED_FlashRed(void)
 {
     flash_error_led();
-
 }
 
 void CMD_LED_Full(void)
@@ -150,8 +143,6 @@ void CMD_LED_Dim(void)
     if (value > 255) value = 255;
 
     grow_set_brightness(value);
-
-
 }
 
 
@@ -159,11 +150,8 @@ void CMD_Request_Moisture(void)
 {
     MoistureReading_t m = Moisture_Read();
 
-
-
     char msg[128];
-    snprintf(msg, sizeof(msg),
-		"{\"MoistureLevel\": %.2f}\n", m);
+    snprintf(msg, sizeof(msg), "{\"MoistureLevel\": %.2f}\n", m);
     UART_Send(msg);
 }
 
@@ -173,20 +161,15 @@ void CMD_Request_Power(void)
     INA219_Data_t d;
     INA219_Read(&d);
 
-
     char msg[128];
-    snprintf(msg, sizeof(msg),
-		"{\"GrowLEDPower\": %.2f}\n", d);
+    snprintf(msg, sizeof(msg), "{\"GrowLEDPower\": %.2f}\n", d);
     UART_Send(msg);
 }
 
 void UART_SendMoisturePercent(float percent)
 {
     char msg[64];
-    snprintf(msg, sizeof(msg),
-             "{\"MoisturePercent\": %.2f}\n",
-             percent);
-
+    snprintf(msg, sizeof(msg), "{\"MoisturePercent\": %.2f}\n", percent);
     UART_Send(msg);
 }
 

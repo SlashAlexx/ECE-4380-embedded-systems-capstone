@@ -29,12 +29,8 @@ void INA219_Init(void)
 {
     Debug_Print("INA219: Initializing...\r\n");
 
-
     INA219_WriteRegister(INA219_CALIB_REG, calibrationValue);
-
-    INA219_WriteRegister(INA219_CONFIG_REG,
-        0x019F);
-
+    INA219_WriteRegister(INA219_CONFIG_REG,0x019F);
     Debug_Print("INA219: Ready.\r\n");
 }
 
