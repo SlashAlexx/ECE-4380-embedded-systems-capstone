@@ -1,6 +1,6 @@
 # ECE-4380 Embedded Systems – Automated STM32 Hydroponics
 
-This repository contains the firmware for our automated hydroponics system.  
+This repository contains the firmware for an automated hydroponics system.  
 The STM32 runs a lightweight custom RTOS and communicates with an ESP32 dashboard over UART.
 
 ---
@@ -60,14 +60,6 @@ The STM32 runs a simple state machine as part of an RTOS task. The main states i
 - Calls either Auto or Manual state logic
 
 ---
-
-## UART Communication
-
-The STM32 sends JSON messages to the ESP32. Examples:
-
-```json
-{"MoistureLevel": 42}
-```
 
 ## Build and Run Instructions
 
