@@ -1,6 +1,6 @@
 # ECE-4380 Embedded Systems – Automated STM32 Hydroponics
 
-This repository contains the STM32 firmware for the automated hydroponics system final project.  
+This repository contains the firmware for our automated hydroponics system.  
 The STM32 runs a lightweight custom RTOS and communicates with an ESP32 dashboard over UART.
 
 ---
@@ -8,87 +8,117 @@ The STM32 runs a lightweight custom RTOS and communicates with an ESP32 dashboar
 ## Overview
 
 The STM32 is responsible for:
+
 - Reading soil moisture
-- Running the pump when soil is dry
-- Monitoring the grow light current via INA219
-- Detecting overcurrent
+- Running the pump when the soil is dry
+- Monitoring grow light current via the INA219
+- Detecting overcurrent situations
 - Sending JSON messages to the ESP32
 - Receiving UART commands (AUTO / MANUAL)
 
 The ESP32 handles:
-- WiFi + Web dashboard
-- Logging and timestamping
-- WebSocket data
-- Storing sensor history
+
+- WiFi and hosting the web dashboard
+- Logging sensor data and timestamps
+- Sending and receiving WebSocket messages
+- Storing historical sensor data
 
 ---
 
-## Software Defined State Machine
+## State Machine
 
-The STM32 uses a simple state machine executed from an RTOS task.  
-The major states are:
+The STM32 runs a simple state machine as part of an RTOS task. The main states include:
 
-### **1. Initialization State (`State_Init`)**
-- Sets default LED color  
-- Reads initial moisture value  
-- Prints initial status over UART debug  
-- Transitions to AUTO mode
+### **1. Initialization (`State_Init`)**
+- Sets the default LED color
+- Reads the initial moisture value
+- Prints status over UART
+- Switches to AUTO mode
 
 ### **2. Auto Mode (`State_Auto`)**
-- Runs the watering decision logic  
-- If soil is **dry** → pump for 2 seconds  
-- If soil is **wet** → do nothing  
-- Disabled if the system is in fail mode
+- Checks moisture readings and decides whether to water
+- Dry soil → pump runs for 2 seconds  
+- Wet soil → no action  
+- Disabled if the system is in a fail state
 
 ### **3. Manual Mode (`State_Manual`)**
-- STM32 disables automatic control  
-- ESP32 dashboard can command pump/LED manually  
-- Used for debugging or user override
+- Automatic watering is disabled
+- Pump and LEDs can be controlled from the ESP32 dashboard
+- Useful for debugging or user override
 
 ### **4. Moisture Update (`State_UpdateMoisture`)**
-- Reads raw and averaged ADC moisture  
-- Updates the global soil state  
+- Reads raw and averaged ADC values
+- Updates the global soil moisture state
 
-### **5. Power + Fail Check (`State_UpdatePower`)**
-- Reads INA219 voltage/current/power  
-- Checks for overcurrent (>1.5A)  
-- Updates fail state and flashes error LED if needed  
+### **5. Power & Fail Check (`State_UpdatePower`)**
+- Reads voltage, current, and power from the INA219
+- Flags overcurrent (>1.5A)
+- Updates fail state and flashes error LED if necessary
 
 ### **6. State Machine Tick (`State_StateMachineTick`)**
-- Called by the RTOS at a fixed rate  
-- Runs either Auto or Manual mode
+- Runs periodically from the RTOS
+- Calls either Auto or Manual state logic
 
 ---
 
-## UART Communication Format
+## UART Communication
 
-The STM32 sends small JSON messages to the ESP32, for example:
+The STM32 sends JSON messages to the ESP32. Examples:
 
 ```json
 {"MoistureLevel": 42}
 ```
 
-```json
-{"AutoWateringLog": true}
-```
+## Build and Run Instructions
 
-```json
-{"GrowLEDPower": 1180.55}
-```
+### STM32 (STM32CubeIDE)
 
+1. **Open the Project**
+   - Launch STM32 and open the `stm32/` folder.
+   - Open the .project or .ino file
+
+2. **Build & Upload**
+   - Click **Verify** to compile  
+   - Click **Upload** to flash the STM32  
+   - Open Serial Monitor at 115200 baud to see debug output
 ---
 
-## Build Information
+### ESP32 Dashboard (Arduino IDE)
 
-- STM32F4 series MCU  
-- STM32CubeIDE  
-- HAL drivers  
-- UART @ **115200 baud**  
+1. **Open the Project**
+   - Open `esp32/PlantWatering/PlantWatering.io` in Arduino IDE 
 
----
+2. **Install Libraries in Package Manager**
+   - `AsyncTCP`  
+   - `ESPAsyncWebServer`  
+   - `ArduinoJson`  
 
-## Group Members
+3. **Upload SPIFFS Files**
+   - Use the **ESP32 Sketch Data Upload** tool to flash the SPIFFS filesystem
 
-- Dennis Rivera  
-- Alexander Roberts  
-- Kohen Yoakum  
+4. **Build & Upload Firmware**
+   - Connect the ESP32 via USB  
+   - Click **Upload** 
+   - The ESP32 will:
+     - Connect to WiFi
+     - Start the WebSocket server
+     - Host the dashboard
+
+5. **Access the Dashboard**
+   - After boot, check the Serial Monitor for the ESP32's local IP
+   - Open in any browser:
+     ```
+     http://<ESP32-IP>/
+     ```
+   - Dashboard displays:
+     - Moisture graph
+     - LED power graph
+     - Watering logs
+     - Control buttons
+
+6. **Verify UART Communication**
+   - When the STM32 sends JSON, the ESP32 Serial Monitor should display:
+     ```
+     UART RAW JSON: {"MoistureLevel": 84.0}
+     ```
+
