@@ -37,8 +37,8 @@ The STM32 runs a simple state machine as part of an RTOS task. The main states i
 
 ### **2. Auto Mode (`State_Auto`)**
 - Checks moisture readings and decides whether to water
-- Dry soil → pump runs for 2 seconds  
-- Wet soil → no action  
+- Dry soil -> pump runs for 2 seconds  
+- Wet soil -> no action  
 - Disabled if the system is in a fail state
 
 ### **3. Manual Mode (`State_Manual`)**
